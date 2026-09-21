@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galaxy Math Quest - เกมคิดเลขเร็วพิชิตอวกาศ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==================== GALAXY THEME CSS ==================== */
+    :root {
+      --bg-dark: #0b0b1a;
+      --primary-purple: #8a2be2;
+      --neon-cyan: #00f3ff;
+      --neon-pink: #ff007f;
+      --neon-gold: #ffd700;
+      --neon-green: #00ff66;
+      --card-bg: rgba(15, 15, 35, 0.92);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Kanit', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .stars-container {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--duration) infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    .game-card {
+      position: relative;
+      z-index: 10;
+      width: 92%;
+      max-width: 620px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 2px solid rgba(0, 243, 255, 0.4);
+      border-radius: 28px;
+      padding: 30px 20px;
+      box-shadow: 0 0 40px rgba(138, 43, 226, 0.5), inset 0 0 20px rgba(0, 243, 255, 0.2);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 25px rgba(0, 243, 255, 0.6);
+      margin-bottom: 5px;
+    }
+
+    p.subtitle {
+      color: #b0b0d0;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(255, 0, 127, 0.9));
+      color: #fff;
+      border: 1px solid var(--neon-cyan);
+      padding: 12px 24px;
+      font-size: 1.05rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+      margin: 6px;
+      font-weight: 600;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 12px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .question-box {
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 20px var(--neon-cyan);
+      margin: 15px 0 20px 0;
+      min-height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    input[type="number"], textarea {
+      width: 85%;
+      padding: 12px;
+      font-size: 1.6rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid var(--neon-pink);
+      border-radius: 16px;
+      color: #fff;
+      outline: none;
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+      margin-bottom: 15px;
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 15px 0;
+    }
+
+    .level-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      padding: 14px 10px;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .level-card.selected {
+      border-color: var(--neon-cyan) !important;
+      background: rgba(138, 43, 226, 0.5) !important;
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+    }
+
+    .level-card.locked {
+      opacity: 0.5;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .stats-box {
+      text-align: left;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 18px;
+      border-radius: 16px;
+      margin: 15px 0;
+      line-height: 2;
+      font-size: 1.05rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars-container" id="stars"></div>
+
+  <div class="game-card">
+
+    <div id="start-screen" class="screen active">
+      <h1>GALAXY MATH</h1>
+      <p class="subtitle">พิชิตโจทย์คณิตศาสตร์ในห้วงอวกาศ!</p>
+
+      <div class="status-bar">
+        <div>🪙 เหรียญ: <span id="user-coins" style="color:var(--neon-gold)">0</span></div>
+        <div>⭐ หัวใจ: 3 ดวง/รอบ</div>
+      </div>
+
+      <h3 style="color:var(--neon-cyan); margin-bottom: 10px;">เลือกระดับความยาก</h3>
+      <div class="level-grid">
+        <div class="level-card selected" id="card-easy" onclick="chooseLevel('easy')">
+          <h4 style="color:var(--neon-green)">🟢 ง่าย (Easy)</h4>
+          <p style="font-size:0.8rem; color:#ccc;">ปลดล็อกแล้ว (15 ข้อ)</p>
+        </div>
+        <div class="level-card locked" id="card-medium" onclick="chooseLevel('medium')">
+          <h4 style="color:var(--neon-gold)">🟡 ปานกลาง (Medium)</h4>
+          <p style="font-size:0.8rem; color:#ccc;" id="lock-medium">ปลดล็อก: 50 🪙</p>
+        </div>
+        <div class="level-card locked" id="card-hard" onclick="chooseLevel('hard')">
+          <h4 style="color:var(--neon-pink)">🔴 ยาก (Hard)</h4>
+          <p style="font-size:0.8rem; color:#ccc;" id="lock-hard">ปลดล็อก: 120 🪙</p>
+        </div>
+        <div class="level-card locked" id="card-expert" onclick="chooseLevel('expert')">
+          <h4 style="color:var(--neon-cyan)">🟣 ยากมาก (Expert)</h4>
+          <p style="font-size:0.8rem; color:#ccc;" id="lock-expert">ปลดล็อก: 250 🪙</p>
+        </div>
+      </div>
+
+      <button class="btn" style="font-size: 1.2rem; width: 85%; background: linear-gradient(135deg, #00f3ff, #8a2be2); color:#000; font-weight:800;" onclick="startSelectedLevel()">▶️ เริ่มเล่นเกมเลย!</button>
+      <br>
+      <button class="btn" onclick="showScreen('custom-screen')">✏️ กำหนดโจทย์เอง</button>
+      <button class="btn" onclick="showScreen('stats-screen')">📊 ดูสถิติ</button>
+    </div>
+
+    <div id="custom-screen" class="screen">
+      <h1>สร้างโจทย์ของคุณ</h1>
+      <p class="subtitle">พิมพ์รูปแบบ: <b>โจทย์ = คำตอบ</b> (1 ข้อต่อบรรทัด)<br>เช่น <code>15 + 25 = 40</code></p>
+      <textarea id="custom-input" rows="5" placeholder="10 + 5 = 15&#10;20 * 2 = 40&#10;100 - 35 = 65"></textarea>
+      <br>
+      <button class="btn" onclick="startCustomGame()">🚀 เริ่มเล่นโจทย์ที่สร้าง</button>
+      <button class="btn" onclick="showScreen('start-screen')">⬅️ กลับหน้าหลัก</button>
+    </div>
+
+    <div id="game-screen" class="screen">
+      <div class="status-bar">
+        <div>⏱️ <span id="timer" style="color:var(--neon-pink)">90</span>s</div>
+        <div><span id="stars-display">⭐⭐⭐</span></div>
+        <div>🪙 <span id="coins-display" style="color:var(--neon-gold)">0</span></div>
+      </div>
+
+      <div style="font-size: 0.95rem; color: #aaa;">ข้อที่ <span id="current-q-num">1</span> / <span id="total-q-num">15</span></div>
+      <div class="question-box" id="question">12 + 8 = ?</div>
+
+      <form onsubmit="submitAnswer(event)">
+        <input type="number" id="answer-input" placeholder="พิมพ์คำตอบ..." autocomplete="off" step="any">
+        <br>
+        <button type="submit" class="btn" style="width: 80%;">ส่งคำตอบ 🚀</button>
+      </form>
+    </div>
+
+    <div id="result-screen" class="screen">
+      <h1 id="result-title">ผลการแข่งขัน</h1>
+      <p id="result-msg" style="font-size: 1.1rem; margin-bottom: 10px;"></p>
+
+      <div class="stats-box">
+        <p>✅ ตอบถูกต้อง: <span id="res-correct" style="color:var(--neon-cyan)">0</span> ข้อ</p>
+        <p>❌ ตอบผิด: <span id="res-wrong" style="color:var(--neon-pink)">0</span> ข้อ</p>
+        <p>⏱️ เวลาที่ใช้: <span id="res-time">0</span> วินาที</p>
+        <p>🪙 เหรียญที่ได้รับเพิ่ม: +<span id="res-coins" style="color:var(--neon-gold)">0</span></p>
+      </div>
+
+      <button class="btn" onclick="showScreen('start-screen')">🏠 กลับหน้าหลัก</button>
+    </div>
+
+    <div id="stats-screen" class="screen">
+      <h1>📊 สถิติการเล่นสะสม</h1>
+      <div class="stats-box">
+        <p>🎮 เล่นไปทั้งหมด: <b id="stat-total-games">0</b> ครั้ง</p>
+        <p>🏆 ชนะ: <b id="stat-wins" style="color:var(--neon-green)">0</b> ครั้ง | ❌ แพ้: <b id="stat-losses" style="color:var(--neon-pink)">0</b> ครั้ง</p>
+        <p>🎯 ตอบถูกสะสม: <b id="stat-total-correct" style="color:var(--neon-cyan)">0</b> ข้อ</p>
+        <p>🪙 เหรียญที่มีในปัจจุบัน: <b id="stat-total-coins" style="color:var(--neon-gold)">0</b></p>
+      </div>
+      <button class="btn" onclick="showScreen('start-screen')">⬅️ กลับหน้าหลัก</button>
+    </div>
+
+  </div>
+
+  <script>
+    /* ==================== GAME DATA & STATE ==================== */
+    let player = {
+      coins: 0,
+      unlocked: { easy: true, medium: false, hard: false, expert: false },
+      stats: { totalGames: 0, wins: 0, losses: 0, totalCorrect: 0 }
+    };
+
+    const unlockCosts = { medium: 50, hard: 120, expert: 250 };
+    let selectedLevelKey = 'easy';
+
+    let currentQuestions = [];
+    let currentQIndex = 0;
+    let starsLeft = 3;
+    let coinsEarnedThisGame = 0;
+    let timerVal = 90;
+    let timerInterval = null;
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    /* ==================== INITIALIZATION ==================== */
+    window.onload = () => {
+      generateBackgroundStars();
+      loadData();
+      updateUI();
+    };
+
+    function generateBackgroundStars() {
+      const container = document.getElementById('stars');
+      if (!container) return;
+      container.innerHTML = '';
+      for (let i = 0; i < 70; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = (Math.random() * 3 + 1) + 'px';
+        star.style.height = star.style.width;
+        star.style.top = Math.random() * 100 + '%';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.setProperty('--duration', (Math.random() * 3 + 1) + 's');
+        container.appendChild(star);
+      }
+    }
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(screenId);
+      if (target) target.classList.add('active');
+      if (screenId === 'start-screen') updateUI();
+      if (screenId === 'stats-screen') updateStatsUI();
+    }
+
+    function updateUI() {
+      document.getElementById('user-coins').innerText = player.coins;
+      
+      ['easy', 'medium', 'hard', 'expert'].forEach(level => {
+        const card = document.getElementById(`card-${level}`);
+        if (!card) return;
+        
+        card.classList.remove('selected');
+        if (level === selectedLevelKey) card.classList.add('selected');
+
+        if (level !== 'easy') {
+          const lockText = document.getElementById(`lock-${level}`);
+          if (player.unlocked[level]) {
+            card.classList.remove('locked');
+            if (lockText) {
+              lockText.innerText = 'ปลดล็อกแล้ว (15 ข้อ)';
+              lockText.style.color = '#00f3ff';
+            }
+          } else {
+            card.classList.add('locked');
+            if (lockText) {
+              lockText.innerText = `ปลดล็อก: ${unlockCosts[level]} 🪙`;
+              lockText.style.color = '#ccc';
+            }
+          }
+        }
+      });
+    }
+function chooseLevel(level) {
+      if (!player.unlocked[level]) {
+        const cost = unlockCosts[level];
+        if (player.coins >= cost) {
+          if (confirm(`ใช้ ${cost} เหรียญเพื่อปลดล็อกระดับนี้?`)) {
+            player.coins -= cost;
+            player.unlocked[level] = true;
+            selectedLevelKey = level;
+            saveData();
+            updateUI();
+            alert('🎉 ปลดล็อกด่านสำเร็จ!');
+          }
+        } else {
+          alert(`เหรียญไม่พอ! ต้องใช้ ${cost} เหรียญ (คุณมี ${player.coins} เหรียญ)`);
+        }
+        return;
+      }
+
+      selectedLevelKey = level;
+      updateUI();
+    }
+
+    function startSelectedLevel() {
+      currentQuestions = generateRandomQuestions(selectedLevelKey, 15);
+      startGame();
+    }
+
+    /* ==================== GENERATE RANDOM QUESTIONS ==================== */
+    function generateRandomQuestions(level, count) {
+      let list = [];
+      for (let i = 0; i < count; i++) {
+        let a, b, op, ans;
+        if (level === 'easy') {
+          op = ['+', '-'][Math.floor(Math.random() * 2)];
+          a = Math.floor(Math.random() * 20) + 1;
+          b = Math.floor(Math.random() * 20) + 1;
+          if (op === '-' && a < b) [a, b] = [b, a];
+          ans = op === '+' ? a + b : a - b;
+        } else if (level === 'medium') {
+          op = ['+', '-', '*'][Math.floor(Math.random() * 3)];
+          a = Math.floor(Math.random() * 40) + 5;
+          b = Math.floor(Math.random() * 12) + 2;
+          if (op === '-' && a < b) [a, b] = [b, a];
+          ans = op === '+' ? a + b : op === '-' ? a - b : a * b;
+        } else if (level === 'hard') {
+          op = ['+', '-', '*', '/'][Math.floor(Math.random() * 4)];
+          if (op === '/') {
+            b = Math.floor(Math.random() * 10) + 2;
+            ans = Math.floor(Math.random() * 12) + 1;
+            a = b * ans;
+          } else {
+            a = Math.floor(Math.random() * 80) + 10;
+            b = Math.floor(Math.random() * 40) + 5;
+            if (op === '-' && a < b) [a, b] = [b, a];
+            ans = op === '+' ? a + b : op === '-' ? a - b : a * b;
+          }
+        } else { // expert
+          op = ['+', '-', '*', '/'][Math.floor(Math.random() * 4)];
+          if (op === '/') {
+            b = Math.floor(Math.random() * 15) + 2;
+            ans = Math.floor(Math.random() * 20) + 1;
+            a = b * ans;
+          } else if (op === '*') {
+            a = Math.floor(Math.random() * 25) + 10;
+            b = Math.floor(Math.random() * 15) + 4;
+            ans = a * b;
+          } else {
+            a = Math.floor(Math.random() * 300) + 50;
+            b = Math.floor(Math.random() * 300) + 50;
+            if (op === '-' && a < b) [a, b] = [b, a];
+            ans = op === '+' ? a + b : a - b;
+          }
+        }
+        list.push({ text: `${a} ${op === '*' ? '×' : op === '/' ? '÷' : op} ${b}`, ans: ans });
+      }
+      return list;
+    }
+function startCustomGame() {
+      const text = document.getElementById('custom-input').value.trim();
+      if (!text) { alert('กรุณากรอกโจทย์อย่างน้อย 1 ข้อ'); return; }
+
+      const lines = text.split('\n');
+      let customList = [];
+
+      lines.forEach(line => {
+        if (line.includes('=')) {
+          let parts = line.split('=');
+          let qText = parts[0].trim();
+          let ansText = parseFloat(parts[1].trim());
+          if (!isNaN(ansText)) customList.push({ text: qText, ans: ansText });
+        }
+      });
+
+      if (customList.length === 0) {
+        alert('รูปแบบโจทย์ไม่ถูกต้อง กรุณาใส่ในรูปแบบ: 10 + 5 = 15');
+        return;
+      }
+
+      currentQuestions = customList;
+      startGame();
+    }
+
+    /* ==================== GAME CORE ==================== */
+    function startGame() {
+      currentQIndex = 0;
+      starsLeft = 3;
+      coinsEarnedThisGame = 0;
+      correctCount = 0;
+      wrongCount = 0;
+      timerVal = 90;
+
+      showScreen('game-screen');
+      updateGameUI();
+      
+      clearInterval(timerInterval);
+      document.getElementById('timer').innerText = timerVal;
+      
+      timerInterval = setInterval(() => {
+        timerVal--;
+        document.getElementById('timer').innerText = timerVal;
+        if (timerVal <= 0) {
+          endGame(false, '⏰ หมดเวลาแล้ว!');
+        }
+      }, 1000);
+
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      if (currentQIndex >= currentQuestions.length) {
+        endGame(true, '🎉 ยินดีด้วย! คุณผ่านครบทุกข้อแล้ว!');
+        return;
+      }
+
+      document.getElementById('current-q-num').innerText = currentQIndex + 1;
+      document.getElementById('total-q-num').innerText = currentQuestions.length;
+      document.getElementById('question').innerText = `${currentQuestions[currentQIndex].text} = ?`;
+      
+      const input = document.getElementById('answer-input');
+      input.value = '';
+      setTimeout(() => input.focus(), 100);
+    }
+
+    function submitAnswer(e) {
+      e.preventDefault();
+      const input = document.getElementById('answer-input');
+      const userAns = parseFloat(input.value);
+
+      if (isNaN(userAns)) return;
+
+      const currentQ = currentQuestions[currentQIndex];
+
+      if (Math.abs(userAns - currentQ.ans) < 0.001) {
+        correctCount++;
+        coinsEarnedThisGame += 10;
+      } else {
+        wrongCount++;
+        starsLeft--;
+        if (starsLeft <= 0) {
+          updateGameUI();
+          endGame(false, '💥 ดาวหมดแล้ว คุณพ่ายแพ้ในรอบนี้!');
+          return;
+        }
+      }
+
+      currentQIndex++;
+      updateGameUI();
+      loadQuestion();
+    }
+
+    function updateGameUI() {
+      document.getElementById('stars-display').innerText = '⭐'.repeat(Math.max(0, starsLeft));
+      document.getElementById('coins-display').innerText = coinsEarnedThisGame;
+    }
+
+    function endGame(isWin, message) {
+      clearInterval(timerInterval);
+
+      player.stats.totalGames++;
+      player.stats.totalCorrect += correctCount;
+      player.coins += coinsEarnedThisGame;
+
+      if (isWin) {
+        player.stats.wins++;
+        document.getElementById('result-title').innerText = '🏆 ชัยชนะ!';
+        document.getElementById('result-title').style.color = '#00f3ff';
+      } else {
+        player.stats.losses++;
+        document.getElementById('result-title').innerText = '💀 พ่ายแพ้!';
+        document.getElementById('result-title').style.color = '#ff007f';
+      }
+document.getElementById('result-msg').innerText = message;
+      document.getElementById('res-correct').innerText = correctCount;
+      document.getElementById('res-wrong').innerText = wrongCount;
+      document.getElementById('res-time').innerText = 90 - timerVal;
+      document.getElementById('res-coins').innerText = coinsEarnedThisGame;
+
+      saveData();
+      showScreen('result-screen');
+    }
+
+    function updateStatsUI() {
+      document.getElementById('stat-total-games').innerText = player.stats.totalGames;
+      document.getElementById('stat-wins').innerText = player.stats.wins;
+      document.getElementById('stat-losses').innerText = player.stats.losses;
+      document.getElementById('stat-total-correct').innerText = player.stats.totalCorrect;
+      document.getElementById('stat-total-coins').innerText = player.coins;
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem('galaxy_math_fix', JSON.stringify(player));
+      } catch (e) {}
+    }
+
+    function loadData() {
+      try {
+        const saved = localStorage.getItem('galaxy_math_fix');
+        if (saved) player = JSON.parse(saved);
+      } catch (e) {}
+    }
+  </script>
+</body>
+</html>
