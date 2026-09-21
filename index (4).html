@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MYSTERY ROOM: 100 ห้องปริศนา (Full BGM System)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800;900&display=swap');
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Kanit', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: #080214;
+      color: #ffffff;
+      margin: 0;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 🌀 1. พื้นหลังตารางไซเบอร์ขยับเลื่อนตลอดเวลา */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -100px; left: -100px;
+      width: calc(100% + 200px);
+      height: calc(100% + 200px);
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.15) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: moveGrid 8s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes moveGrid {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(40px, 40px); }
+    }
+
+    /* ✨ 2. ชั้นเรืองแสงทรงกลมหมุนวนลอยอยู่ด้านหลัง */
+    body::after {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 0, 127, 0.25) 0%, rgba(121, 40, 202, 0.2) 40%, transparent 70%);
+      animation: floatGlow 10s ease-in-out infinite alternate;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @keyframes floatGlow {
+      0% { transform: translate(-30%, -30%) scale(1); }
+      50% { transform: translate(20%, 20%) scale(1.2); }
+      100% { transform: translate(-20%, 30%) scale(0.9); }
+    }
+
+    /* หน้าต่างเกมพร้อมแอนิเมชันนีออน */
+    .game-window {
+      background: rgba(18, 5, 36, 0.92);
+      border: 3px solid #00f0ff;
+      border-radius: 28px;
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      min-height: 640px;
+      animation: pulseBorder 4s infinite alternate, floatWindow 6s ease-in-out infinite;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    }
+
+    @keyframes pulseBorder {
+      0% {
+        border-color: #00f0ff;
+        box-shadow: 0 0 25px #00f0ff, 0 0 50px rgba(255, 0, 127, 0.5), inset 0 0 20px rgba(0, 240, 255, 0.3);
+      }
+      50% {
+        border-color: #ff007f;
+        box-shadow: 0 0 35px #ff007f, 0 0 70px rgba(0, 240, 255, 0.6), inset 0 0 30px rgba(255, 0, 127, 0.4);
+      }
+      100% {
+        border-color: #ffe600;
+        box-shadow: 0 0 30px #ffe600, 0 0 60px rgba(121, 40, 202, 0.7), inset 0 0 25px rgba(255, 230, 0, 0.3);
+      }
+    }
+
+    @keyframes floatWindow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* 🎵 ปุ่มเปิด-ปิด เสียง BGM */
+    .bgm-toggle-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 50;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid #00f0ff;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+      transition: all 0.3s;
+    }
+
+    .bgm-toggle-btn:hover {
+      transform: scale(1.15);
+      border-color: #ffe600;
+      box-shadow: 0 0 20px #ffe600;
+    }
+
+    /* ปุ่มนีออนแบบขยับดึ๋งๆ และเรืองแสง */
+    .btn-neon {
+      padding: 12px 20px;
+      border: 2px solid #ffffff;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-neon::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(60deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: rotate(30deg) translateY(-100%);
+      transition: transform 0.6s;
+    }
+
+    .btn-neon:hover::after {
+      transform: rotate(30deg) translateY(100%);
+    }
+
+    .btn-neon:hover {
+      transform: translateY(-4px) scale(1.05);
+      filter: brightness(1.3);
+    }
+    .btn-neon:active { transform: translateY(2px) scale(0.95); }
+
+    .btn-start { 
+      background: linear-gradient(135deg, #ff007f 0%, #7928ca 50%, #00f0ff 100%); 
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.8); 
+      border-color: #ffe600;
+      font-size: 18px;
+      animation: pulseBtn 2s infinite;
+    }
+
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); box-shadow: 0 0 30px #ff007f; }
+    }
+
+    .btn-map { 
+      background: linear-gradient(135deg, #00b4db 0%, #0083b0 50%, #7928ca 100%); 
+      box-shadow: 0 0 15px rgba(0, 180, 219, 0.6); 
+      border-color: #00f0ff;
+    }
+    .btn-stats { 
+      background: linear-gradient(135deg, #f857a6 0%, #ff5858 100%); 
+      box-shadow: 0 0 15px rgba(248, 87, 166, 0.6); 
+      border-color: #ffe600;
+    }
+    .btn-hint { 
+      background: linear-gradient(135deg, #ff8c00 0%, #e52e71 100%); 
+      box-shadow: 0 0 15px rgba(255, 140, 0, 0.6); 
+      border-color: #ffe600;
+    }
+    .btn-go { 
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); 
+      box-shadow: 0 0 18px rgba(56, 239, 125, 0.8); 
+      border-color: #ffffff;
+      animation: glowGo 1.5s infinite alternate;
+    }
+
+    @keyframes glowGo {
+      0% { box-shadow: 0 0 10px #38ef7d; }
+      100% { box-shadow: 0 0 25px #38ef7d, 0 0 10px #fff; }
+    }
+
+    .btn-retry { 
+      background: linear-gradient(135deg, #ff0055 0%, #ff8c00 100%); 
+      box-shadow: 0 0 20px #ff0055; 
+      border-color: #ffe600;
+    }
+    .btn-home { 
+      background: linear-gradient(135deg, #7928ca 0%, #2575fc 100%); 
+      box-shadow: 0 0 15px rgba(37, 117, 252, 0.6); 
+      border-color: #00f0ff;
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      text-align: center;
+      flex-grow: 1;
+      animation: fadeIn 0.4s ease-out;
+    }
+    .screen.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .title-banner {
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px dashed #00f0ff;
+      border-radius: 20px;
+      padding: 12px 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+      position: relative;
+    }
+
+    .main-title {
+      font-size: 38px;
+      font-weight: 900;
+      background: linear-gradient(90deg, #ffe600, #ff007f, #00f0ff, #ffe600);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shineText 3s linear infinite;
+      margin: 0;
+    }
+
+    @keyframes shineText {
+      to { background-position: 200% center; }
+    }
+
+    .main-subtitle {
+      color: #00f0ff;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 4px;
+      text-shadow: 0 0 8px #00f0ff;
+    }
+
+    .floating-icons {
+      font-size: 50px;
+      margin-bottom: 10px;
+      animation: floatIcon 3s ease-in-out infinite alternate;
+      display: inline-block;
+    }
+
+    @keyframes floatIcon {
+      0% { transform: translateY(0) rotate(-5deg); }
+      100% { transform: translateY(-12px) rotate(5deg); }
+    }
+
+    .time-selector-card {
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid #7928ca;
+      border-radius: 20px;
+      padding: 12px;
+      margin-bottom: 15px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 15px rgba(121, 40, 202, 0.4);
+    }
+
+    .time-selector-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffe600;
+      margin-bottom: 8px;
+      text-shadow: 0 0 8px #ffe600;
+    }
+
+    .time-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .btn-time-opt {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid #00f0ff;
+      color: #00f0ff;
+      padding: 6px 4px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-time-opt.active {
+      background: linear-gradient(135deg, #ff007f 0%, #7928ca 100%);
+      border-color: #ffe600;
+      color: #ffe600;
+      box-shadow: 0 0 12px #ff007f;
+      transform: scale(1.05);
+    }
+
+    .custom-time-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .custom-time-input {
+      background: #090314;
+      border: 2px solid #00f0ff;
+      color: #ffe600;
+      padding: 4px 8px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 800;
+      width: 75px;
+      outline: none;
+    }
+
+    .menu-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 85%;
+      max-width: 320px;
+    }
+
+    .hud-bar {
+      background: linear-gradient(90deg, #110522 0%, #2a0845 50%, #110522 100%);
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #00f0ff;
+      width: 100%;
+      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.4);
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .hud-pill {
+      background: rgba(0, 0, 0, 0.75);
+      border: 1.5px solid #00f0ff;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #00f0ff;
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+    }
+
+    .timer-pill {
+      background: rgba(255, 0, 85, 0.2);
+      border: 2px solid #ff0055;
+      color: #ff0055;
+      box-shadow: 0 0 10px #ff0055;
+      animation: pulseTimer 0.8s infinite alternate;
+    }
+
+    @keyframes pulseTimer {
+      0% { transform: scale(1); box-shadow: 0 0 5px #ff0055; }
+      100% { transform: scale(1.08); box-shadow: 0 0 20px #ff0055, 0 0 10px #ff007f; }
+    }
+
+    .world-badge {
+      background: linear-gradient(135deg, #ff007f 0%, #7928ca 100%);
+      color: #ffe600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 12px;
+      border: 1px solid #ffe600;
+      box-shadow: 0 0 10px #ff007f;
+    }
+
+    .viewport {
+      background: radial-gradient(circle at center, rgba(35, 12, 70, 0.8) 0%, rgba(10, 3, 25, 0.95) 100%);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      flex-grow: 1;
+    }
+
+    .room-header {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffe600;
+      text-shadow: 0 0 12px #ffe600, 0 0 25px #ff007f;
+      margin-bottom: 12px;
+    }
+
+    .stage-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 2px dashed #00f0ff;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2) inset;
+      backdrop-filter: blur(5px);
+    }
+
+    .neon-obj {
+      font-size: 90px;
+      cursor: pointer;
+      transition: all 0.3s;
+      filter: drop-shadow(0 0 20px rgba(255, 230, 0, 0.9));
+      animation: bounceSticker 2s infinite ease-in-out;
+      display: inline-block;
+      margin: 10px 0;
+    }
+
+    @keyframes bounceSticker {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-12px) scale(1.1) rotate(5deg); }
+    }
+
+    .neon-obj:hover { 
+      transform: scale(1.25) rotate(10deg) !important; 
+      filter: drop-shadow(0 0 35px #00f0ff);
+    }
+
+    .neon-input {
+      background: #090314;
+      border: 3px solid #ff007f;
+      color: #ffe600;
+      padding: 10px 15px;
+      border-radius: 16px;
+      text-align: center;
+      font-size: 26px;
+      font-weight: 900;
+      width: 160px;
+      outline: none;
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.4) inset, 0 0 10px rgba(255, 0, 127, 0.3);
+      letter-spacing: 2px;
+      transition: all 0.3s;
+    }
+    .neon-input:focus {
+      border-color: #00f0ff;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.8) inset, 0 0 20px #00f0ff;
+      transform: scale(1.05);
+    }
+
+    .controls-panel {
+      background: #0a0316;
+      border-top: 3px solid #7928ca;
+      padding: 15px;
+      width: 100%;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding: 12px;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 16px;
+      border: 1px solid #7928ca;
+    }
+
+    .map-node {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #7928ca;
+      border-radius: 12px;
+      padding: 10px 4px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .map-node:hover:not(.locked) {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 0 15px #00f0ff;
+    }
+
+    .map-node.cleared {
+      background: rgba(56, 239, 125, 0.25);
+      border-color: #38ef7d;
+      color: #38ef7d;
+    }
+
+    .map-node.current {
+      background: rgba(255, 0, 127, 0.4);
+      border-color: #ffe600;
+      color: #ffe600;
+      animation: pulseNode 1.5s infinite alternate;
+    }
+
+    @keyframes pulseNode {
+      0% { box-shadow: 0 0 5px #ffe600; }
+      100% { box-shadow: 0 0 20px #ff007f; }
+    }
+
+    .map-node.locked {
+      opacity: 0.35;
+      cursor: not-allowed;
+      border-color: #444;
+    }
+
+    .stats-card {
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid #00f0ff;
+      border-radius: 20px;
+      padding: 15px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .stats-table th {
+      background: rgba(121, 40, 202, 0.6);
+      color: #ffe600;
+      padding: 8px;
+      border: 1px solid #7928ca;
+      font-weight: 800;
+    }
+
+    .stats-table td {
+      padding: 8px;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .stats-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .summary-box {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .summary-item {
+      background: rgba(255, 0, 127, 0.15);
+      border: 1.5px solid #ff007f;
+      border-radius: 12px;
+      padding: 8px;
+      transition: transform 0.2s;
+    }
+
+    .summary-item:hover {
+      transform: scale(1.03);
+    }
+
+    .summary-val {
+      font-size: 20px;
+      font-weight: 900;
+      color: #ffe600;
+    }
+
+    .summary-lbl {
+      font-size: 12px;
+      color: #00f0ff;
+      font-weight: 600;
+    }
+
+    .gameover-title {
+      font-size: 45px;
+      font-weight: 900;
+      color: #ff0055;
+      text-shadow: 0 0 20px #ff0055, 0 0 40px #ff007f;
+      margin-bottom: 10px;
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+
+    .modal-overlay {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(8, 2, 20, 0.96);
+      padding: 20px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+      animation: fadeIn 0.3s;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .hint-step-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid #7928ca;
+      border-radius: 12px;
+      padding: 10px;
+      margin: 6px 0;
+      width: 100%;
+      max-width: 420px;
+      text-align: left;
+      transition: all 0.3s;
+    }
+
+    .hint-step-box.active-hint {
+      border-color: #ffe600;
+      box-shadow: 0 0 15px rgba(255, 230, 0, 0.4);
+      background: rgba(255, 230, 0, 0.1);
+    }
+
+    .hint-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #00f0ff;
+    }
+
+    .hint-body {
+      font-size: 18px;
+      font-weight: 900;
+      color: #ffe600;
+      margin-top: 4px;
+    }
+
+    .hint-body.locked-text {
+      color: #666;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body onclick="initAudioOnFirstClick()">
+
+<div class="game-window">
+  <!-- 1. หน้าปกหลัก -->
+  <div id="screen-menu" class="screen active">
+    <button id="bgm-btn" class="bgm-toggle-btn" onclick="toggleBGM(event)" title="เปิด/ปิดเพลงประกอบ">🔊</button>
+
+    <div class="floating-icons">🔑⚡🎯</div>
+    
+    <div class="title-banner">
+      <h1 class="main-title">MYSTERY ROOM</h1>
+      <div class="main-subtitle">⏱️ ท้าทายสปีดถอดรหัส 100 ห้อง (Full BGM) ⏱️</div>
+    </div>
+
+    <!-- ส่วนเลือกเวลา -->
+    <div class="time-selector-card">
+      <div class="time-selector-title">⏱️ เลือกเวลาจำกัดต่อด่าน</div>
+      <div class="time-options">
+        <button class="btn-time-opt" onclick="selectTimeSetting(5, this)">5 วินาที</button>
+        <button class="btn-time-opt active" onclick="selectTimeSetting(10, this)">10 วินาที</button>
+        <button class="btn-time-opt" onclick="selectTimeSetting(15, this)">15 วินาที</button>
+        <button class="btn-time-opt" onclick="selectTimeSetting(20, this)">20 วินาที</button>
+        <button class="btn-time-opt" onclick="selectTimeSetting(25, this)">25 วินาที</button>
+        <button class="btn-time-opt" onclick="selectTimeSetting(30, this)">30 วินาที</button>
+      </div>
+      <div class="custom-time-box">
+        <span style="font-size:12px; font-weight:600; color:#00f0ff;">⚙️ กำหนดเอง:</span>
+        <input type="number" id="custom-time-input" class="custom-time-input" min="1" max="300" placeholder="วินาที" oninput="setCustomTime(this.value)">
+        <span style="font-size:12px; font-weight:600; color:#00f0ff;">วิ</span>
+      </div>
+    </div>
+    
+    <div class="menu-buttons">
+      <button class="btn-neon btn-start" onclick="startGame()">▶️ เริ่มตะลุยห้องปริศนา</button>
+      <button class="btn-neon btn-map" onclick="showMap()">🗺️ แผนที่ด่านทั้งหมด</button>
+      <button class="btn-neon btn-stats" onclick="showStats()">📊 ตารางบันทึกสถิติ</button>
+    </div>
+  </div>
+
+  <!-- 2. หน้าเล่นเกม -->
+  <div id="screen-game" class="screen" style="padding:0;">
+    <div class="hud-bar">
+      <div class="hud-pill">🚪 ห้อง <span id="hud-room" style="color:#ffe600;">1</span>/100</div>
+      <div class="hud-pill timer-pill">⏱️ เวลา: <span id="hud-timer" style="color:#ff0055; font-size:16px;">10</span>s</div>
+      <div class="hud-pill" id="hud-hearts">❤️❤️❤️</div>
+      <div class="hud-pill">💡 คำใบ้ด่านนี้: <span id="hud-hints" style="color:#ffe600;">0/3</span></div>
+      <div class="world-badge" id="hud-world">🏰 โลก 1</div>
+    </div>
+
+    <div class="viewport">
+      <div class="room-header" id="room-header">ห้องที่ 1</div>
+      
+      <div class="stage-card" id="stage-card">
+        <!-- เนื้อหาด่านสร้างอัตโนมัติ -->
+      </div>
+
+      <div id="status-msg" style="min-height:28px; font-weight:800; color:#00f0ff; text-shadow:0 0 10px #00f0ff; font-size:16px;"></div>
+    </div>
+
+    <div class="controls-panel">
+      <button class="btn-neon btn-hint" id="btn-hint-trigger" onclick="useHint()">💡 ขอคำใบ้ (<span id="hint-btn-count">1</span>/3)</button>
+      <button class="btn-neon btn-go" onclick="submitPass()">🔓 ถอดรหัสประตู</button>
+      <button class="btn-neon btn-home" style="padding:10px 16px;" onclick="goToMenu()">🏠 หน้าหลัก</button>
+    </div>
+  </div>
+
+  <!-- 3. หน้าแผนที่ -->
+  <div id="screen-map" class="screen">
+    <h2 style="color:#ffe600; margin-top:0; text-shadow:0 0 12px #ffe600; font-size:26px;">🗺️ แผนที่ 100 ห้องปริศนา</h2>
+    <p style="font-size:13px; color:#00f0ff; margin-bottom:12px; font-weight:600;">เลือกลองเล่นด่านที่เคยผ่านมาแล้วได้เลย!</p>
+    
+    <div class="map-grid" id="map-grid"></div>
+
+    <button class="btn-neon btn-home" style="margin-top:15px; width:200px;" onclick="goToMenu()">🏠 กลับหน้าหลัก</button>
+  </div>
+
+  <!-- 4. หน้าตารางสถิติ -->
+  <div id="screen-stats" class="screen">
+    <h2 style="color:#ffe600; margin-top:0; text-shadow:0 0 12px #ffe600; font-size:26px;">📊 ตารางสถิติการเล่น</h2>
+    
+    <div class="stats-card">
+      <div class="summary-box">
+        <div class="summary-item">
+          <div class="summary-val" id="stat-max-room">1</div>
+          <div class="summary-lbl">🚪 ด่านสูงสุดที่ไปถึง</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-val" id="stat-total-cleared">0</div>
+          <div class="summary-lbl">✅ จำนวนด่านที่ผ่านรวม</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-val" id="stat-total-failed">0</div>
+          <div class="summary-lbl">❌ ตอบผิด/หมดเวลารวม</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-val" id="stat-fastest-ans">--</div>
+          <div class="summary-lbl">⚡ ใช้เวลาน้อยสุดต่อด่าน</div>
+        </div>
+      </div>
+      <div style="font-weight:800; color:#00f0ff; text-align:left; margin-bottom:5px;">🏆 เวลาทำสถิติดีที่สุด (Best Clear Time):</div>
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>โหมดเวลา</th>
+            <th>เวลาที่เร็วที่สุด</th>
+          </tr>
+        </thead>
+        <tbody id="stats-table-body">
+          <!-- ข้อมูลสถิติสร้างด้วย JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <button class="btn-neon btn-home" style="margin-top:15px; width:200px;" onclick="goToMenu()">🏠 กลับหน้าหลัก</button>
+  </div>
+
+  <!-- 5. หน้าจอแพ้ -->
+  <div id="screen-gameover" class="screen">
+    <div class="floating-icons" style="font-size: 70px;">⏰💥💀</div>
+    <div class="gameover-title" id="gameover-reason">GAME OVER!</div>
+    <p style="color:#00f0ff; font-size:16px; margin-bottom: 25px; font-weight:600;" id="gameover-sub">หมดเวลา หรือ หัวใจหมดแล้ว!</p>
+    
+    <div class="menu-buttons">
+      <button class="btn-neon btn-retry" onclick="retryRoom()">🔄 ลองใหม่อีกครั้ง (ด่านเดิม)</button>
+      <button class="btn-neon btn-home" onclick="goToMenu()">🏠 กลับหน้าหลัก</button>
+    </div>
+  </div>
+
+  <!-- Pop-up แสดงคำใบ้ 3 ระดับ -->
+  <div class="modal-overlay" id="pop-modal">
+    <h3 style="color:#ffe600; margin-top:0; font-size:22px; margin-bottom:10px;">💡 คำใบ้ถอดรหัส (3 ระดับ)</h3>
+    
+    <!-- คำใบ้ที่ 1 -->
+    <div class="hint-step-box" id="hint-box-1">
+      <div class="hint-title">📌 คำใบ้ที่ 1: โครงสร้างโจทย์</div>
+      <div class="hint-body" id="hint-text-1">???</div>
+    </div>
+
+    <!-- คำใบ้ที่ 2 -->
+    <div class="hint-step-box" id="hint-box-2">
+      <div class="hint-title">📌 คำใบ้ที่ 2: โจทย์คำนวณเต็ม</div>
+      <div class="hint-body locked-text" id="hint-text-2">🔒 กดขอคำใบ้เพิ่มเพื่อปลดล็อก</div>
+    </div>
+
+    <!-- คำใบ้ที่ 3 -->
+    <div class="hint-step-box" id="hint-box-3">
+      <div class="hint-title">📌 คำใบ้ที่ 3: เฉลยขอบเขตคำตอบ</div>
+      <div class="hint-body locked-text" id="hint-text-3">🔒 กดขอคำใบ้เพิ่มเพื่อปลดล็อก</div>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:15px;">
+      <button class="btn-neon btn-hint" id="btn-next-hint" onclick="unlockNextHint()">💡 ขอคำใบ้ถัดไป</button>
+      <button class="btn-neon btn-go" onclick="closeModal()">คิดออกแล้ว!</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* -------------------------------------------------------------
+     🎵 1. ระบบจำลองเอฟเฟกต์เสียงและ BGM เต็มรูปแบบ (Chiptune Synthesizer)
+  ------------------------------------------------------------- */
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let audioCtx = null;
+  let isBgmPlaying = false;
+  let bgmLoopTimer = null;
+  let isMuted = false;
+
+  function initAudio() {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+
+  function initAudioOnFirstClick() {
+    initAudio();
+    if (!isBgmPlaying && !isMuted) startBGM();
+  }
+
+  // 🎼 โน้ตทำนองเพลง BGM เกมไซเบอร์ 8-bit (Melody & Bassline)
+  const bgmMelody = [
+    { melody: 523.25, bass: 130.81, dur: 0.18 }, // C5, C3
+    { melody: 587.33, bass: 130.81, dur: 0.18 }, // D5
+    { melody: 659.25, bass: 164.81, dur: 0.18 }, // E5, E3
+    { melody: 783.99, bass: 164.81, dur: 0.18 }, // G5
+    { melody: 880.00, bass: 174.61, dur: 0.18 }, // A5, F3
+    { melody: 783.99, bass: 174.61, dur: 0.18 }, // G5
+    { melody: 659.25, bass: 196.00, dur: 0.18 }, // E5, G3
+    { melody: 587.33, bass: 196.00, dur: 0.18 }, // D5
+
+    { melody: 523.25, bass: 130.81, dur: 0.18 },
+    { melody: 659.25, bass: 130.81, dur: 0.18 },
+    { melody: 783.99, bass: 164.81, dur: 0.18 },
+    { melody: 1046.50, bass: 164.81, dur: 0.18 }, // C6
+    { melody: 880.00, bass: 174.61, dur: 0.18 },
+    { melody: 659.25, bass: 174.61, dur: 0.18 },
+    { melody: 587.33, bass: 196.00, dur: 0.18 },
+    { melody: 523.25, bass: 196.00, dur: 0.18 }
+  ];
+
+  function playBgmNotePair(melodyFreq, bassFreq, time, duration) {
+    if (!audioCtx || isMuted) return;
+    try {
+      // 1. เสียงทำนองหลัก (Square Wave synth)
+      const osc1 = audioCtx.createOscillator();
+      const gain1 = audioCtx.createGain();
+      osc1.type = 'square';
+      osc1.frequency.setValueAtTime(melodyFreq, time);
+      gain1.gain.setValueAtTime(0.04, time);
+      gain1.gain.exponentialRampToValueAtTime(0.001, time + duration);
+      osc1.connect(gain1);
+      gain1.connect(audioCtx.destination);
+      osc1.start(time);
+      osc1.stop(time + duration);
+
+      // 2. เสียงเบสคุมจังหวะ (Triangle Wave bass)
+      const osc2 = audioCtx.createOscillator();
+      const gain2 = audioCtx.createGain();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(bassFreq, time);
+      gain2.gain.setValueAtTime(0.08, time);
+      gain2.gain.exponentialRampToValueAtTime(0.001, time + duration);
+      osc2.connect(gain2);
+      gain2.connect(audioCtx.destination);
+      osc2.start(time);
+      osc2.stop(time + duration);
+    } catch(e){}
+  }
+
+  function startBGM() {
+    initAudio();
+    if (isBgmPlaying || isMuted) return;
+    isBgmPlaying = true;
+    let step = 0;
+
+    function loop() {
+      if (!isBgmPlaying) return;
+      const now = audioCtx.currentTime;
+      const note = bgmMelody[step % bgmMelody.length];
+      playBgmNotePair(note.melody, note.bass, now, note.dur);
+      step++;
+      bgmLoopTimer = setTimeout(loop, note.dur * 1000);
+    }
+    loop();
+  }
+
+  function stopBGM() {
+    isBgmPlaying = false;
+    if (bgmLoopTimer) {
+      clearTimeout(bgmLoopTimer);
+      bgmLoopTimer = null;
+    }
+  }
+
+  function toggleBGM(e) {
+    if (e) e.stopPropagation();
+    initAudio();
+    isMuted = !isMuted;
+    const btn = document.getElementById("bgm-btn");
+    if (isMuted) {
+      btn.innerText = "🔇";
+      stopBGM();
+    } else {
+      btn.innerText = "🔊";
+      startBGM();
+    }
+  }
+
+  function playSoundClick() {
+    initAudio();
+    if (!audioCtx || isMuted) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+  }
+
+  function playSoundSuccess() {
+    initAudio();
+    if (!audioCtx || isMuted) return;
+    const now = audioCtx.currentTime;
+    const freqs = [523.25, 659.25, 783.99, 1046.50]; 
+    freqs.forEach((f, idx) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(f, now + idx * 0.08);
+      gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now + idx * 0.08);
+      osc.stop(now + idx * 0.08 + 0.25);
+    });
+  }
+
+  function playSoundError() {
+    initAudio();
+    if (!audioCtx || isMuted) return;
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.setValueAtTime(110, now + 0.1);
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(now + 0.25);
+  }
+
+  function playSoundHint() {
+    initAudio();
+    if (!audioCtx || isMuted) return;
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, now);
+    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(now + 0.15);
+  }
+
+  function playSoundTick() {
+    initAudio();
+    if (!audioCtx || isMuted) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.03);
+  }
+
+  function playSoundGameOver() {
+    initAudio();
+    if (!audioCtx || isMuted) return;
+    const now = audioCtx.currentTime;
+    const freqs = [300, 260, 220, 150];
+    freqs.forEach((f, idx) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(f, now + idx * 0.15);
+      gain.gain.setValueAtTime(0.25, now + idx * 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.15 + 0.3);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now + idx * 0.15);
+      osc.stop(now + idx * 0.15 + 0.3);
+    });
+  }
+
+
+  /* -------------------------------------------------------------
+     🎮 2. ระบบเกมหลัก และ 💡 ระบบคำใบ้ 3 ขั้น
+  ------------------------------------------------------------- */
+  const STICKERS_POOL = [
+    "🔑", "🗝️", "🚪", "💎", "🔮", "⚡", "🌟", "👑", "📜", "🧪",
+    "🛸", "🤖", "👻", "👾", "🐉", "🦄", "🎆", "🎨", "🎭", "🎪",
+    "🦁", "🐯", "🦊", "🐻", "🐼", "🐨", "🐸", "🐵", "🐔", "🐧",
+    "🐤", "🦆", "🦅", "🦉", "🦇", "🐺", "🐗", "🐴", "🐝", "🐛",
+    "🦋", "🐌", "🐞", "🐜", "🕷️", "🦂", "🐢", "🐍", "🐙",
+    "🦑", "🦐", "🦞", "🦀", "🐡", "🐠", "🐟", "🐬", "🐳", "🐋",
+    "🦈", "🐊", "🐅", "🐆", "ZEBRA", "🦍", "🦧", "🐘", "🦛", "🦏",
+    "🐪", "🐫", "🦒", "🦘", "🦬", "🐃", "🐂", "🐄", "🐎", "🐖",
+    "🐏", "🐑", "🦙", "🐐", "🦌", "🐕", "🐩", "🐈", "🐓", "🦃",
+    "🦚", "🦜", "🦩", "🕊️", "🐇", "🦝", "🦡", "🦦", "🦥", "🐁"
+  ];
+
+  let currentRoom = 1;
+  let hearts = 3;
+  let timeLimit = 10;
+  let timerVal = 10;
+  let timerInterval = null;
+  let activeAnswer = null;
+  let hintsUnlockedCount = 0; // จำนวนคำใบ้ที่ปลดล็อกแล้ว (1-3)
+  let roomStartTime = 0;
+
+  // สถิติผู้เล่น
+  let maxUnlockedRoom = 1;
+  let totalCleared = 0;
+  let totalFailed = 0;
+  let fastestAnsTime = null;
+  let bestTimesPerSetting = { 5: null, 10: null, 15: null, 20: null, 25: null, 30: null };
+
+  let currentHints = { step1: "", step2: "", step3: "" };
+
+  function selectTimeSetting(sec, btnElement) {
+    playSoundClick();
+    timeLimit = sec;
+    document.querySelectorAll('.btn-time-opt').forEach(b => b.classList.remove('active'));
+    if(btnElement) btnElement.classList.add('active');
+    document.getElementById('custom-time-input').value = "";
+  }
+
+  function setCustomTime(val) {
+    let num = parseInt(val);
+    if(num && num >= 1 && num <= 300) {
+      timeLimit = num;
+      document.querySelectorAll('.btn-time-opt').forEach(b => b.classList.remove('active'));
+    }
+  }
+
+  function switchScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+  }
+
+  function goToMenu() {
+    playSoundClick();
+    clearInterval(timerInterval);
+    switchScreen('screen-menu');
+  }
+
+  function startGame() {
+    playSoundClick();
+    startBGM();
+    currentRoom = 1;
+    hearts = 3;
+    loadRoom(currentRoom);
+    switchScreen('screen-game');
+  }
+
+  function retryRoom() {
+    playSoundClick();
+    hearts = 3;
+    loadRoom(currentRoom);
+    switchScreen('screen-game');
+  }
+
+  /* -------------------------------------------------------------
+     🎲 3. ระบบสุ่มโจทย์ 100 ด่าน + ระบบคำใบ้ 3 ระดับ
+  ------------------------------------------------------------- */
+  function loadRoom(roomNum) {
+    clearInterval(timerInterval);
+    hintsUnlockedCount = 0; // รีเซ็ตคำใบ้สำหรับด่านใหม่
+    timerVal = timeLimit;
+    roomStartTime = Date.now();
+    
+    document.getElementById('hud-room').innerText = roomNum;
+    document.getElementById('hud-timer').innerText = timerVal;
+    document.getElementById('room-header').innerText = `ห้องที่ ${roomNum}`;
+    
+    // อัปเดตการแสดงผลหัวใจ
+    let heartStr = "";
+    for(let i=0; i<3; i++) heartStr += (i < hearts) ? "❤️" : "🖤";
+    document.getElementById('hud-hearts').innerText = heartStr;
+
+    // คำนวณ World
+    let worldNum = Math.ceil(roomNum / 10);
+    document.getElementById('hud-world').innerText = `🏰 โลก ${worldNum}`;
+
+    // สร้างโจทย์
+    generatePuzzle(roomNum);
+
+    // อัปเดตปุ่มคำใบ้
+    updateHintButtonUI();
+
+    // เริ่มนับถอยหลัง
+    timerInterval = setInterval(() => {
+      timerVal--;
+      document.getElementById('hud-timer').innerText = timerVal;
+      if (timerVal <= 5 && timerVal > 0) {
+        playSoundTick();
+      }
+      if (timerVal <= 0) {
+        clearInterval(timerInterval);
+        handleFailure("หมดเวลา!");
+      }
+    }, 1000);
+  }
+
+  function generatePuzzle(roomNum) {
+    const stageCard = document.getElementById('stage-card');
+    const msg = document.getElementById('status-msg');
+    stageCard.innerHTML = "";
+    msg.innerText = "";
+
+    const sticker = STICKERS_POOL[(roomNum - 1) % STICKERS_POOL.length];
+
+    // คำนวณตัวเลขแปรผันตามด่าน
+    let a = (roomNum * 3 + 7) % 20 + 2;
+    let b = (roomNum * 5 + 3) % 15 + 1;
+    let c = roomNum + 2;
+
+    let type = (roomNum % 4);
+    if (type === 1) {
+      // ประเภท 1: คำนวณหาผลลัพธ์
+      let result = (a * b) + c;
+      activeAnswer = result.toString();
+
+      stageCard.innerHTML = `
+        <div style="font-size:18px; font-weight:800; color:#00f0ff;">ปลดล็อกรหัสผ่านโดยคำนวณสมการสติ๊กเกอร์:</div>
+        <div class="neon-obj" onclick="animateSticker(this)">${sticker}</div>
+        <div style="font-size:20px; font-weight:800; color:#ffe600;">(${a} × ${b}) + ${c} = ?</div>
+        <input type="number" id="game-input" class="neon-input" placeholder="รหัส" autofocus onkeyup="checkEnter(event)">
+      `;
+
+      currentHints = {
+        step1: `หาผลคูณในวงเล็บก่อน จากนั้นนำไปบวกกับ ${c}`,
+        step2: `ผลคูณ (${a} × ${b}) = ${a * b} แล้วนำ ${a * b} + ${c}`,
+        step3: `คำตอบคือเลขระหว่าง ${result - 2} ถึง ${result + 2}`
+      };
+
+    } else if (type === 2) {
+      // ประเภท 2: ถอดรหัสสมการ
+      let x = (roomNum % 12) + 3;
+      let total = x * a;
+      activeAnswer = x.toString();
+
+      stageCard.innerHTML = `
+        <div style="font-size:18px; font-weight:800; color:#00f0ff;">ค้นหาค่าของสติ๊กเกอร์ ${sticker} :</div>
+        <div class="neon-obj" onclick="animateSticker(this)">${sticker}</div>
+        <div style="font-size:20px; font-weight:800; color:#ffe600;">${sticker} × ${a} = ${total}</div>
+        <input type="number" id="game-input" class="neon-input" placeholder="ค่า ${sticker}" autofocus onkeyup="checkEnter(event)">
+      `;
+
+      currentHints = {
+        step1: `นำผลลัพธ์ย้ายไปหารด้วย ${a}`,
+        step2: `คำนวณหาค่าจาก ${total} ÷ ${a}`,
+        step3: `คำตอบเป็นจำนวนเต็มอยู่ในช่วง ${x - 1} ถึง ${x + 1}`
+      };
+
+    } else if (type === 3) {
+      // ประเภท 3: นับจำนวนสติ๊กเกอร์เรืองแสง
+      let count = (roomNum % 7) + 3;
+      activeAnswer = count.toString();
+
+      let stickersHTML = "";
+      for (let i = 0; i < count; i++) {
+        stickersHTML += `<span class="neon-obj" style="font-size:45px; margin:4px;" onclick="animateSticker(this)">${sticker}</span>`;
+      }
+
+      stageCard.innerHTML = `
+        <div style="font-size:18px; font-weight:800; color:#00f0ff;">นับจำนวนสติ๊กเกอร์เรืองแสงทั้งหมดในห้อง:</div>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; max-width:320px;">${stickersHTML}</div>
+        <input type="number" id="game-input" class="neon-input" placeholder="จำนวน" autofocus onkeyup="checkEnter(event)">
+      `;
+
+      currentHints = {
+        step1: `ลองนับสติ๊กเกอร์บนหน้าจอทีละตัวอย่างระมัดระวัง`,
+        step2: `มีสติ๊กเกอร์ปรากฏบนหน้าจอมากกว่า ${count - 2} ตัว`,
+        step3: `จำนวนสติ๊กเกอร์ทั้งหมดคือ ${count} ตัว`
+      };
+
+    } else {
+      // ประเภท 0: อนุกรมตัวเลข
+      let start = roomNum * 2;
+      let diff = (roomNum % 4) + 2;
+      let ans = start + (diff * 3);
+      activeAnswer = ans.toString();
+
+      stageCard.innerHTML = `
+        <div style="font-size:18px; font-weight:800; color:#00f0ff;">หาตัวเลขลำดับถัดไปของแบบรูป:</div>
+        <div class="neon-obj" onclick="animateSticker(this)">${sticker}</div>
+        <div style="font-size:22px; font-weight:900; color:#ffe600;">${start}, ${start + diff}, ${start + (diff*2)}, [ ? ]</div>
+        <input type="number" id="game-input" class="neon-input" placeholder="ตัวเลข" autofocus onkeyup="checkEnter(event)">
+      `;
+
+      currentHints = {
+        step1: `สังเกตตัวเลขว่าเพิ่มขึ้นครั้งละเท่าๆ กัน`,
+        step2: `ตัวเลขเพิ่มขึ้นทีละ +${diff} (นำ ${start + (diff*2)} + ${diff})`,
+        step3: `คำตอบคือเลข ${ans}`
+      };
+    }
+  }
+
+  function checkEnter(e) {
+    if (e.key === 'Enter') submitPass();
+  }
+
+  function animateSticker(el) {
+    playSoundClick();
+    el.style.transform = "scale(1.4) rotate(20deg)";
+    setTimeout(() => { el.style.transform = ""; }, 300);
+  }
+
+  /* -------------------------------------------------------------
+     💡 4. ระบบคำใบ้ 3 ขั้น (Show Hints Modal)
+  ------------------------------------------------------------- */
+  function useHint() {
+    playSoundHint();
+    if (hintsUnlockedCount === 0) {
+      hintsUnlockedCount = 1;
+    }
+    updateHintModalUI();
+    document.getElementById('pop-modal').classList.add('active');
+  }
+
+  function unlockNextHint() {
+    if (hintsUnlockedCount < 3) {
+      playSoundHint();
+      hintsUnlockedCount++;
+      updateHintModalUI();
+    }
+  }
+
+  function closeModal() {
+    playSoundClick();
+    document.getElementById('pop-modal').classList.remove('active');
+  }
+
+  function updateHintButtonUI() {
+    document.getElementById('hud-hints').innerText = `${hintsUnlockedCount}/3`;
+    document.getElementById('hint-btn-count').innerText = hintsUnlockedCount > 0 ? hintsUnlockedCount : 1;
+  }
+
+  function updateHintModalUI() {
+    updateHintButtonUI();
+
+    // ขั้นที่ 1
+    const t1 = document.getElementById('hint-text-1');
+    t1.innerText = currentHints.step1;
+
+    // ขั้นที่ 2
+    const b2 = document.getElementById('hint-box-2');
+    const t2 = document.getElementById('hint-text-2');
+    if (hintsUnlockedCount >= 2) {
+      b2.classList.add('active-hint');
+      t2.className = "hint-body";
+      t2.innerText = currentHints.step2;
+    } else {
+      b2.classList.remove('active-hint');
+      t2.className = "hint-body locked-text";
+      t2.innerText = "🔒 กดขอคำใบ้ถัดไปเพื่อปลดล็อก";
+    }
+
+    // ขั้นที่ 3
+    const b3 = document.getElementById('hint-box-3');
+    const t3 = document.getElementById('hint-text-3');
+    if (hintsUnlockedCount >= 3) {
+      b3.classList.add('active-hint');
+      t3.className = "hint-body";
+      t3.innerText = currentHints.step3;
+      document.getElementById('btn-next-hint').style.display = 'none';
+    } else {
+      b3.classList.remove('active-hint');
+      t3.className = "hint-body locked-text";
+      t3.innerText = "🔒 กดขอคำใบ้ถัดไปเพื่อปลดล็อก";
+      document.getElementById('btn-next-hint').style.display = 'inline-block';
+    }
+  }
+
+  /* -------------------------------------------------------------
+     🎯 5. ตรวจคำตอบและการบันทึกสถิติ
+  ------------------------------------------------------------- */
+  function submitPass() {
+    const input = document.getElementById('game-input');
+    if (!input || !input.value.trim()) return;
+
+    let userVal = input.value.trim();
+
+    if (userVal === activeAnswer) {
+      // ตอบถูก!
+      playSoundSuccess();
+      clearInterval(timerInterval);
+      
+      let timeSpent = ((Date.now() - roomStartTime) / 1000).toFixed(1);
+      
+      // บันทึกสถิติ
+      totalCleared++;
+      if (currentRoom > maxUnlockedRoom) maxUnlockedRoom = currentRoom;
+      
+      if (fastestAnsTime === null || parseFloat(timeSpent) < parseFloat(fastestAnsTime)) {
+        fastestAnsTime = timeSpent;
+      }
+
+      if (!bestTimesPerSetting[timeLimit] || parseFloat(timeSpent) < parseFloat(bestTimesPerSetting[timeLimit])) {
+        bestTimesPerSetting[timeLimit] = timeSpent;
+      }
+
+      document.getElementById('status-msg').style.color = "#38ef7d";
+      document.getElementById('status-msg').innerText = `🎉 ถูกต้อง! ปลดล็อกประตูสำเร็จในเวลา ${timeSpent}s`;
+
+      setTimeout(() => {
+        if (currentRoom < 100) {
+          currentRoom++;
+          if (currentRoom > maxUnlockedRoom) maxUnlockedRoom = currentRoom;
+          loadRoom(currentRoom);
+        } else {
+          alert("🏆 ยินดีด้วย! คุณสามารถพิชิตครบทั้ง 100 ห้องปริศนาได้สำเร็จ!");
+          goToMenu();
+        }
+      }, 800);
+    } else {
+      // ตอบผิด
+      playSoundError();
+      hearts--;
+      totalFailed++;
+      
+      let heartStr = "";
+      for(let i=0; i<3; i++) heartStr += (i < hearts) ? "❤️" : "🖤";
+      document.getElementById('hud-hearts').innerText = heartStr;
+
+      document.getElementById('status-msg').style.color = "#ff0055";
+      document.getElementById('status-msg').innerText = "❌ รหัสผ่านไม่ถูกต้อง! ลองใหม่อีกครั้ง";
+
+      input.value = "";
+      input.focus();
+
+      if (hearts <= 0) {
+        clearInterval(timerInterval);
+        handleFailure("หัวใจหมดแล้ว!");
+      }
+    }
+  }
+
+  function handleFailure(reason) {
+    playSoundGameOver();
+    totalFailed++;
+    document.getElementById('gameover-reason').innerText = "GAME OVER!";
+    document.getElementById('gameover-sub').innerText = `${reason} คุณหยุดอยู่ที่ห้อง ${currentRoom}`;
+    switchScreen('screen-gameover');
+  }
+
+  /* -------------------------------------------------------------
+     🗺️ 6. แสดงแผนที่ และ 📊 สถิติ
+  ------------------------------------------------------------- */
+  function showMap() {
+    playSoundClick();
+    const grid = document.getElementById('map-grid');
+    grid.innerHTML = "";
+
+    for (let i = 1; i <= 100; i++) {
+      let node = document.createElement('div');
+      node.className = "map-node";
+      
+      if (i < maxUnlockedRoom) {
+        node.classList.add('cleared');
+        node.innerText = `✓ ${i}`;
+        node.onclick = () => { playSoundClick(); currentRoom = i; hearts = 3; loadRoom(i); switchScreen('screen-game'); };
+      } else if (i === maxUnlockedRoom) {
+        node.classList.add('current');
+        node.innerText = `🚪 ${i}`;
+        node.onclick = () => { playSoundClick(); currentRoom = i; hearts = 3; loadRoom(i); switchScreen('screen-game'); };
+      } else {
+        node.classList.add('locked');
+        node.innerText = `🔒 ${i}`;
+      }
+
+      grid.appendChild(node);
+    }
+
+    switchScreen('screen-map');
+  }
+
+  function showStats() {
+    playSoundClick();
+    document.getElementById('stat-max-room').innerText = maxUnlockedRoom;
+    document.getElementById('stat-total-cleared').innerText = totalCleared;
+    document.getElementById('stat-total-failed').innerText = totalFailed;
+    document.getElementById('stat-fastest-ans').innerText = fastestAnsTime ? `${fastestAnsTime}s` : "--";
+
+    const tbody = document.getElementById('stats-table-body');
+    tbody.innerHTML = "";
+
+    [5, 10, 15, 20, 25, 30].forEach(sec => {
+      let tr = document.createElement('tr');
+      let best = bestTimesPerSetting[sec] ? `${bestTimesPerSetting[sec]} วินาที` : "ยังไม่มีสถิติ";
+      tr.innerHTML = `<td>โหมดจำกัด ${sec} วินาที</td><td>${best}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    switchScreen('screen-stats');
+  }
+</script>
+
+</body>
+</html>
