@@ -1,0 +1,21 @@
+{
+  "short_name": "BioEpidemic",
+  "name": "BioEpidemic Quest PWA",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192/ff758c/ffffff?text=BIO",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://via.placeholder.com/512/ff758c/ffffff?text=BIO",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "PHANUMATkk.1.html",
+  "background_color": "#ff9a9e",
+  "theme_color": "#ff758c",
+  "display": "standalone",
+  "orientation": "portrait"
+}

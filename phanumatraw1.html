@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 ReadAWrite Cute Town 🦄 - คลังนิยายพาสเทลสุดน่ารัก</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Sukhumvit Set', 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #a8ebe6 0%, #ffe4e9 35%, #f3d1f4 70%, #fff3cd 100%);
+            background-attachment: fixed;
+            color: #4a4a4a;
+            padding-bottom: 80px;
+        }
+
+        /* Header Bar */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid #ffb6c1;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 20px;
+        }
+
+        .tab {
+            font-size: 19px;
+            font-weight: 800;
+            color: #8b80f9;
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #fff;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            box-shadow: 0 3px 10px rgba(255, 154, 158, 0.5);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9a9e, #a1c4fd);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Search Bar Component */
+        .search-container {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.6);
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 18px;
+            border-radius: 25px;
+            border: 2px solid #b5e2fa;
+            background-color: #ffffff;
+            color: #555;
+            font-size: 14px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #ffb6c1;
+        }
+
+        /* Views */
+        .view-page {
+            display: none;
+        }
+
+        .view-page.active {
+            display: block;
+        }
+/* Banner */
+        .banner {
+            margin: 16px;
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border-radius: 20px;
+            padding: 22px;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(135, 206, 235, 0.4);
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #fff;
+        }
+
+        .banner h2 {
+            font-size: 22px;
+            margin-bottom: 6px;
+            text-shadow: 1px 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* Filter Tags */
+        .categories {
+            display: flex;
+            gap: 10px;
+            padding: 5px 16px 15px 16px;
+            overflow-x: auto;
+        }
+
+        .tag {
+            background: #ffffff;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+            color: #7b7b7b;
+            cursor: pointer;
+            border: 2px solid #e2f0d9;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+
+        .tag.active {
+            background: linear-gradient(45deg, #ffc3a0, #ffafbd);
+            color: #fff;
+            border-color: #fff;
+            box-shadow: 0 4px 12px rgba(255, 175, 189, 0.4);
+        }
+
+        /* Section */
+        .section {
+            padding: 0 16px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 14px;
+            color: #6c5ce7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 8px 14px;
+            border-radius: 15px;
+        }
+
+        .story-count {
+            font-size: 12px;
+            background: #fff3cd;
+            color: #d68910;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid #fff;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.06);
+        }
+
+        .card:hover {
+            transform: translateY(-6px) rotate(1deg);
+            box-shadow: 0 8px 18px rgba(255, 182, 193, 0.4);
+        }
+
+        .card-cover {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        .card-info {
+            padding: 10px 8px;
+        }
+
+        .card-title {
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 1.3;
+            height: 32px;
+            color: #333;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .card-author {
+            font-size: 10px;
+            color: #9b59b6;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .card-stats {
+            font-size: 9px;
+            color: #ff7675;
+            margin-top: 4px;
+            font-weight: bold;
+        }
+
+        /* Forms & Inputs */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #555;
+        }
+.form-control {
+            width: 100%;
+            padding: 10px 14px;
+            background: #ffffff;
+            border: 2px solid #b5e2fa;
+            border-radius: 12px;
+            color: #333;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: #ff9a9e;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        /* List Items */
+        .list-item {
+            display: flex;
+            gap: 12px;
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            align-items: center;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .list-item:hover {
+            transform: scale(1.02);
+        }
+
+        .list-item img {
+            width: 55px;
+            height: 75px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .list-content {
+            flex: 1;
+        }
+
+        .badge {
+            background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+            color: #2c3e50;
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .badge-fanfic {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            color: #c0392b;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 3px solid #ffb6c1;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+            z-index: 90;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: #a0a0a0;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-item.active {
+            color: #ff6b81;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: 4px;
+            background-color: #ff4757;
+            color: white;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        /* Full Screen Pages & Modals */
+        .full-page {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            z-index: 200;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .full-page.active {
+            display: block;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border: 4px solid #ffb6c1;
+        }
+
+        .reader-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 14px;
+            align-items: center;
+            justify-content: space-between;
+        }
+.btn {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            border: none;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            box-shadow: 0 4px 10px rgba(255, 154, 158, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: #a1c4fd;
+            color: #2c3e50;
+            box-shadow: 0 4px 10px rgba(161, 196, 253, 0.4);
+        }
+
+        .chapter-item {
+            background: #ffffff;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            font-weight: bold;
+            color: #444;
+        }
+
+        .chapter-item:hover {
+            background: #fff0f3;
+        }
+
+        .reading-content {
+            font-size: 16px;
+            line-height: 2.2;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 16px;
+            white-space: pre-line;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="tabs">
+            <span class="tab active">🎀 คลังนิยายพาสเทล 🎀</span>
+        </div>
+        <div class="header-icons">
+            <div class="profile-img" onclick="openProfileModal()" id="headerProfileAvatar">🐱</div>
+        </div>
+    </div>
+
+    <!-- ช่องค้นหานิยาย -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 ค้นหานิยายสุดน่ารัก หรือนามปากกา..." oninput="handleSearch()">
+    </div>
+
+    <div id="homeView" class="view-page active">
+        <div class="banner">
+            <h2>✨ 🎀 Welcome to Novel Town 🎀 ✨</h2>
+            <p>🦄 รวมนิยาย 200 เรื่อง 4 หมวดพาสเทล อ่านฟินยาวๆ 5-10 ตอน! 🌈</p>
+        </div>
+
+        <div class="categories">
+            <div class="tag active" onclick="filterCategory(this, 'all')">🌈 ทั้งหมด (200)</div>
+            <div class="tag" onclick="filterCategory(this, 'romantic')">🌸 โรแมนติก (50)</div>
+            <div class="tag" onclick="filterCategory(this, 'funny')">🐥 ตลก / สดใส (50)</div>
+            <div class="tag" onclick="filterCategory(this, 'warm')">🧸 อุ่นหัวใจ (50)</div>
+            <div class="tag" onclick="filterCategory(this, 'fanfic')">⭐ Fanfic (50)</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">
+                <span id="categoryTitle">📚 รายชื่อนิยายทั้งหมด</span>
+                <span class="story-count" id="storyCountText">กำลังโหลด...</span>
+            </div>
+            <div class="grid" id="storyGrid"></div>
+        </div>
+    </div>
+
+    <div id="readingView" class="view-page">
+        <div class="section" style="margin-top: 16px;">
+            <div class="section-title">📖 ชั้นหนังสือสุดเลิฟของฉัน 💖</div>
+            <div id="shelfList"></div>
+        </div>
+    </div>
+
+    <div id="writingView" class="view-page">
+        <div class="section" style="margin-top: 16px;">
+            <div class="section-title">✏️ สตูดิโอนักเขียนน้อย 🎨</div>
+            
+            <div style="background: #ffffff; padding: 20px; border-radius: 20px; border: 3px solid #ffb6c1; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <h3 style="margin-bottom: 14px; color: #ff6b81;">✨ สร้างสรรค์ผลงานใหม่ ✨</h3>
+                
+                <div class="form-group">
+                    <label>🎀 ชื่อเรื่องนิยาย</label>
+                    <input type="text" id="newTitle" class="form-control" placeholder="ตั้งชื่อเรื่องเก๋ๆ...">
+                </div>
+
+                <div class="form-group">
+                    <label>🏷️ หมวดหมู่</label>
+                    <select id="newCategory" class="form-control">
+                        <option value="romantic">🌸 โรแมนติก</option>
+                        <option value="funny">🐥 ตลก / สดใส</option>
+                        <option value="warm">🧸 อุ่นหัวใจ</option>
+                        <option value="fanfic">⭐ Fanfic</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📝 คำย่อ / คำโปรย</label>
+                    <textarea id="newDesc" class="form-control" placeholder="เขียนโปรยความน่ารักของเรื่องนี้..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>📖 เนื้อเรื่อง (ตอนที่ 1)</label>
+                    <textarea id="newChapterContent" class="form-control" style="min-height: 160px;" placeholder="พิมพ์บทบรรยายยาวๆ น่ารักๆ ที่นี่ได้เลย..."></textarea>
+                </div>
+
+                <button class="btn" style="width: 100%; font-size: 15px;" onclick="publishNewStory()">🚀 เผยแพร่นิยายเข้าคลัง ✨</button>
+            </div>
+        </div>
+    </div>
+  <div id="fanficView" class="view-page">
+        <div class="section" style="margin-top: 16px;">
+            <div class="section-title">⭐ จักรวาล Fanfic สุดฟิน 🌟</div>
+            <div class="grid" id="fanficGrid"></div>
+        </div>
+    </div>
+
+    <div id="activityView" class="view-page">
+        <div class="section" style="margin-top: 16px;">
+            <div class="section-title">🔔 การแจ้งเตือนอัปเดตนิยาย 💌</div>
+            <div id="notificationList"></div>
+        </div>
+    </div>
+
+    <!-- หน้าต่างแก้ไขโปรไฟล์ (Modal Profile Edit) -->
+    <div id="profileModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color:#ff6b81; margin-bottom: 15px;">👤 แก้ไขโปรไฟล์คิ้วท์ๆ</h3>
+            <div class="form-group">
+                <label>🐱 นามปากกา / ชื่อผู้แต่ง</label>
+                <input type="text" id="profileNameInput" class="form-control" value="นักเขียนคิ้วท์ตี้ 🎀">
+            </div>
+            <div class="form-group">
+                <label>💌 คำอธิบายโปรไฟล์ (Bio)</label>
+                <textarea id="profileBioInput" class="form-control" style="min-height: 70px;" placeholder="แนะนำตัวเองน่ารักๆ..."></textarea>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="closeProfileModal()">ยกเลิก</button>
+                <button class="btn" onclick="saveProfile()">บันทึกข้อมูล ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailPage" class="full-page">
+        <button class="btn btn-secondary" onclick="closeDetailPage()" style="margin-bottom:15px;">← ย้อนกลับ</button>
+        <h2 id="detailTitle" style="color:#6c5ce7; margin-bottom:6px;">ชื่อเรื่อง</h2>
+        <p id="detailAuthor" style="color:#ff7675; font-size:13px; font-weight:bold; margin-bottom:15px;">ผู้แต่ง: -</p>
+        <p id="detailDesc" style="font-size:14px; line-height:1.6; margin-bottom:20px; color:#4a4a4a; background:#fff; padding:12px; border-radius:12px;"></p>
+        
+        <div style="display:flex; gap:10px; margin-bottom:20px;">
+            <button class="btn" onclick="addToShelfCurrent()" style="flex:1;">💖 เก็บเข้าชั้นหนังสือ</button>
+            <button class="btn btn-secondary" onclick="addChapterPrompt()" style="flex:1;">✏️ เพิ่มตอนใหม่</button>
+        </div>
+        
+        <h3 style="margin-bottom:12px; color:#fff; text-shadow:1px 1px 2px rgba(0,0,0,0.2);">📜 รายชื่อตอนทั้งหมด</h3>
+        <div id="chapterList"></div>
+    </div>
+
+    <div id="readerPage" class="full-page">
+        <div class="reader-controls">
+            <button class="btn btn-secondary" onclick="closeReaderPage()">← ออกจากหน้าอ่าน</button>
+            <div>
+                <button class="btn btn-secondary" onclick="changeFontSize(1)">A+</button>
+                <button class="btn btn-secondary" onclick="changeFontSize(-1)">A-</button>
+            </div>
+        </div>
+        <h2 id="readerChapterTitle" style="color:#fff; margin-bottom:12px; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">ตอนที่</h2>
+        <div id="readerBody" class="reading-content"></div>
+        
+        <div class="page-navigation">
+            <button id="prevBtn" class="btn btn-secondary" onclick="navigateChapter(-1)">← ตอนก่อนหน้า</button>
+            <button id="nextBtn" class="btn" onclick="navigateChapter(1)">ตอนถัดไป ➔</button>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchNav(this, 'homeView')">
+            <span class="nav-icon">🏠</span>
+            <span>หน้าหลัก</span>
+        </div>
+        <div class="nav-item" onclick="switchNav(this, 'fanficView')">
+            <span class="nav-icon">⭐</span>
+            <span>Fanfic</span>
+        </div>
+        <div class="nav-item" onclick="switchNav(this, 'readingView')">
+            <span class="nav-icon">📖</span>
+            <span>ชั้นหนังสือ</span>
+        </div>
+        <div class="nav-item" onclick="switchNav(this, 'writingView')">
+            <span class="nav-icon">✏️</span>
+            <span>แต่งนิยาย</span>
+        </div>
+        <div class="nav-item" onclick="switchNav(this, 'activityView')">
+            <span class="nav-icon">🔔</span>
+            <span class="notification-badge" id="notifBadge">5</span>
+            <span>แจ้งเตือน</span>
+        </div>
+    </div>
+
+    <script>
+        // ข้อมูลผู้ใช้ (Profile)
+        let userProfile = {
+            name: "นักเขียนคิ้วท์ตี้ 🎀",
+            bio: "ยินดีต้อนรับสู่โลกพาสเทลสุดน่ารักของฉันนะ!"
+        };
+const storyTitles = {
+            romantic: [
+                "🎀 สายลมแห่งรักริมหาดทราย 🌊", "💖 เมื่อดวงใจไร้เงาจันทร์ 🌙", "🌸 จุมพิตแรกในวันฝนตก ☔", "🌹 กุหลาบซ่อนรักในรอยจำ 💭", "🎶 เพลงรักกลางฤดูร้อน ☀️",
+                "✨ รักนี้ไม่มีคำว่าสาย ⏰", "⭐ ดวงดาวในตาเธอ 🌌", "🏖️ คำสัญญาที่หาดหัวหิน 🌅", "🕯️ อุ่นไอรักใต้แสงดาว 🌟", "⏳ ปาฏิหาริย์รักข้ามกาลเวลา 💫",
+                "☕ บันทึกรักบาริสต้าสาว 🍪", "🌅 กอดสุดท้ายก่อนรุ่งสาง 🌇", "🗝️ หัวใจซ่อนเงา 👤", "✈️ รักเธอเท่าฟ้าแดนไกล ☁️", "🍂 รอยยิ้มในสายลมฤดูใบไม้ร่วง 🍁",
+                "💓 เสียงหัวใจบอกว่าใช่เธอ 💌", "🌫️ รักร้อยใจในสายหมอก 🏔️", "🚶‍♂️ เมื่อรักเดินทางมาพบเรา 🚶‍♀️", "😈 รักแท้ของนายวายร้าย 💘", "💼 แอบรักคุณประธาน 🤫",
+                "🍵 สัญญารักในถ้วยชา 🍃", "⚙️ เจ้าสาวของวิศวะ 💍", "🌷 ดอกไม้ในหัวใจ 🌼", "🌌 รักสุดปลายฟ้า 🌠", "📷 ซ่อนรักไว้ในความทรงจำ 🎞️",
+                "💋 รอยจุมพิตใต้เงารัก 🌙", "❤️ หัวใจนี้เพื่อเธอ 💕", "🌕 เงาจันทร์ซ่อนรัก ☁️", "❄️ รักไม่มีวันละลาย 🍦", "🛠️ ดวงใจวิศวะ 💓",
+                "🎵 เสียงเพลงแห่งรัก 🎹", "👀 ความรู้สึกเมื่อแรกเจอ ✨", "🌆 ตกหลุมรักยามเย็น 🌇", "🧵 สายใยรักไม่เคยจาง 🎀", "❓ รักแท้หรือแค่เผลอ 💭",
+                "💐 กลิ่นหอมของรัก 🌸", "💞 รักลึกซึ้งในหัวใจ 💖", "🛑 เมื่อหัวใจหยุดที่เธอ 🔒", "😊 รอยยิ้มซ่อนรัก 🤫", "🌙 ฝันดีนะความรัก 💤",
+                "💔 รักข้างเดียวของฉัน 🎈", "☔ เจ้าชายในสายฝน 👑", "🫠 หัวใจละลายเมื่อใกล้เธอ 🍫", "🌸 ความทรงจำสีชมพู 🎀", "🤝 กุมมือกันไว้ตลอดไป 💍",
+                "👓 รักสุดหัวใจนายเฉิ่ม 📚", "🍃 เมื่อลมพัดพาเรามาเจอ 🌾", "🔑 กุญแจหัวใจ 💖", "สดชื่น รักไม่เคยลืมเลือน 🌺", "🎓 แอบรักรุ่นพี่ปีสี่ 🏫"
+            ],
+            funny: [
+                "🤪 ติณติน หยุด(แปลก)ดิ พี่ขอ 🛑", "👦 การมีพี่ชายหล่อมากเกินไป 😂", "🎒 ป่วนรักก๊วนเพื่อนซี้ปีหนึ่ง 🏫", "🐾 เมื่อผมกลายเป็นทาสแมว 🐈", "🏖️ ก๊วนซ่าท้าลมร้อน ☀️",
+                "💘 ปฏิบัติการจีบประธานนักเรียน 🎯", "🚪 ย้ายบ้านมาเจอข้างห้องตัวป่วน 🤪", "🍳 สูตรลับฉบับตัวตลก 🤡", "🕵️‍♂️ วันวุ่นๆ ของคุณบอดี้การ์ด 🕶️", "🤖 พี่ครับอย่ามาแปลก 🚫",
+                "☕ อลเวงรักสายคาเฟ่ 🍰", "🍳 เมื่อสายลับต้องมาทำอาหาร 🔪", "🎈 ชมรมสุดป่วนก๊วนคนซ่า 🎉", "😈 อย่าให้ผมต้องร้าย 💥", "💔 ฮายามะผู้ไม่เคยสมหวัง 😭",
+                "🚨 ภารกิจกู้วิกฤตแก๊งป่วน 🧨", "🤓 รักป่วนๆ ของนายเฉิ่ม 👓", "🤫 เพื่อนสนิทคิดไม่ซื่อ 💖", "🥊 ยอดนักสู้สายตลก 🤡", "🌀 วุ่นนักรักข้ามรุ่น ⚡",
+                "🥳 แก๊งบ๊องอลเวง 🤪", "🪄 เมื่อผมโดนวาร์ปไปโลกเวทมนตร์ 🔮", "🤯 ประธานนักเรียนหัวจะปวด 📑", "🛋️ ความซวยของนายสายชิล ☕", "🍔 อย่าท้าทายสายกิน 🍕",
+                "🔍 ปฏิบัติการตามหาแมวหาย 🐱", "🏠 roommate ตัวป่วน 💥", "👻 เมื่อหมอผีโดนผีหลอก 😱", "🍹 สุดยอดก๊วนป่วนคาเฟ่ 🧁", "👨‍🏫 เรื่องวุ่นๆ ของคุณครูใหม่ 📚",
+                "🔄 รักสลับขั้วตัวฮา 🎭", "🤝 มิตรภาพสายฮา 🐥", "😎 ความลับของนายหล่อเท่ 🕶️", "💘 เมื่อตลกตัวพ่ออยากมีรัก 🤡", "🏘️ แก๊งเพื่อนรักซอยแปด 🚀",
+                "🔥 สุดจัดในรุ่น 😎", "🌙 เรื่องป่วนๆ ยามดึก 🦉", "🙊 อย่าให้ผมต้องพูด 🤫", "⚙️ วิศวะสายฮา 🛠️", "😜 ความลับของสายซน 🎈",
+                "🌞 ป่วนรักยามเช้า ☕", "🎤 เมื่อผมต้องมาเป็นไอดอล ✨", "🚀 ก๊วนป่วนหลุดโลก 🪐", "🎆 ฮาข้ามปี 🥳", "🤡 ความรักของนายสายตลก 💖",
+                "💥 ตลกไม่กั๊กจัดเต็ม 🎉", "👑 เมื่อฮีโร่กลายเป็นทาส 🐈", "🏃 ซนไม่หยุดฉุดไม่อยู่ 💨", "📖 เรื่องฮาๆ ของพวกเรา 🐥", "🌍 ซ่าสุดในสามโลก ⚡"
+            ],
+            warm: [
+                "🏡 บ้านหลังแรกของเรา 🌸", "📚 ร้านหนังสือยามเย็น 🌆", "🍵 ชานมร้อนในวันหิมะตก ❄️", "🌳 ต้นไม้แห่งความทรงจำ 🍃", "👵 เรื่องเล่าจากคุณยาย 🧶",
+                "🕊️ บทเพลงแห่งความหวัง 🎶", "🌅 แสงแดดยามเช้า ☀️", "🧳 การเดินทางของหัวใจ 💖", "☕ ความสุขในถ้วยชา 🌿", "🎒 เพื่อนเดินทาง 🗺️",
+                "⏳ คำตอบของกาลเวลา 🕰️", "👨‍👦 รอยยิ้มของคุณพ่อ 🌻", "🍁 สายลมแห่งฤดูใบไม้ร่วง 🍂", "🍾 ความทรงจำในขวดแก้ว 📜", "🌊 ที่พักใจริมทะเล 🏝️",
+                "✉️ จดหมายถึงอนาคต 📮", "🌼 ความสุขง่ายๆ ในทุกวัน 🌈", "🌉 สะพานแห่งความฝัน 🌟", "🏡 บ้านสวนอบอุ่น 🍎", "🍀 เส้นทางสายโชคดี 🌈",
+                "❤️ อุ่นไอรักจากครอบครัว 👨‍👩‍👧", "☕ กาแฟร้อนยามเช้า 🥐", "👶 รอยยิ้มของเด็กน้อย 🎈", "🌷 สวนดอกไม้ข้างบ้าน 🐝", "📸 ความทรงจำดีๆ ที่มีเธอ 🎞️",
+                "🤗 อุ่นใจเมื่อใกล้กัน 💞", "🌬️ สายลมแห่งความคิดถึง 🌾", "📖 บทเรียนของชีวิต 🕯️", "💖 หัวใจอบอุ่น 🧸", "🏡 บ้านของเรา 🌻",
+                "☀️ แสงตะวันยามสาดส่อง 🌅", "💭 ความฝันในวันวาน 🎈", "✨ ความสุขที่แท้จริง 🌸", "🤝 มิตรภาพไม่เคยจาง 🌷", "🪟 เรื่องเล่าริมหน้าต่าง 🌧️",
+                "🏡 บ้านน้อยกลางป่าใหญ่ 🌲", "💓 ความอบอุ่นในหัวใจ 🧸", "📖 หนังสือเล่มโปรด ☕", "🛋️ วันสบายๆ ของฉัน 🍰", "🎵 บทเพลงยามค่ำคืน 🌙",
+                "🌟 ความหวังในใจ ✨", "🌞 รอยยิ้มในยามเช้า 🌻", "🧸 ความสุขเล็กๆ 🍬", "🤝 เพื่อนแท้ตลอดไป 💖", "🌾 บ้านสวนสายลม 🍃", "💧 สายน้ำไหลผ่านหัวใจ 🐟", "⭐ แสงดาวนำทาง 🌌", "🍯 ความทรงจำอันแสนหวาน 🥞", "🏡 บ้านที่อุดมไปด้วยรัก 💖", "🤗 โอบกอดแห่งความอบอุ่น 🌸"
+            ],
+            fanfic: [
+                "🌌 [Fanfic] จักรวาลสมมติของสองเรา ✨", "🎬 [Fanfic] เมื่อพระเอกหลุดมาโลกจริง 🌍", "💫 [Fanfic] ปาฏิหาริย์รักต่างมิติ 🌀", "🪐 [Fanfic] สายใยรักข้ามจักรวาล 🚀", "🦸‍♂️ [Fanfic] วันสบายๆ ของเหล่าฮีโร่ ☕",
+                "😈 [Fanfic] รักข้ามมิติของนายตัวร้าย 🔮", "🪄 [Fanfic] บทใหม่ในโลกเวทมนตร์ 🏰", "👑 [Fanfic] เมื่อตัวร้ายกลายเป็นพระเอก 💖", "🕵️‍♂️ [Fanfic] ภารกิจลับของเหล่าตัวเอก 💥", "🧩 [Fanfic] ความทรงจำที่หายไป 🌌",
+                "⚔️ [Fanfic] โชคชะตาแห่งแสงสว่าง 🌟", "🌙 [Fanfic] ความรักใต้แสงจันทร์ 🌌", "🤝 [Fanfic] มิตรภาพแห่งจักรวาล 🪐", "📖 [Fanfic] บทสรุปที่คุณเลือกเอง 🎯", "🩸 [Fanfic] รักแท้ข้ามสายเลือด 🛡️",
+                "🛡️ [Fanfic] การกลับมาของอัศวิน 🐎", "🏰 [Fanfic] ความลับในโรงเรียนเวทมนตร์ 🧹", "🗺️ [Fanfic] การเดินทางครั้งสุดท้าย 🌅", "🔮 [Fanfic] พรหมลิขิตแห่งโชคชะตา ✨", "💖 [Fanfic] ชะตากรรมของสองหัวใจ 💞",
+                "🌴 [Fanfic] เมื่อเหล่าร้ายพักผ่อน 🍹", "🛡️ [Fanfic] มิตรภาพสู้ภัยมืด ⚔️", "👑 [Fanfic] ความฝันของราชา 🏰", "📜 [Fanfic] ตำนานบทใหม่ 🌟", "💍 [Fanfic] สัญญารักในอดีต ⏳",
+                "🌌 [Fanfic] รักไร้ سرحد 🚀", "🌀 [Fanfic] จักรวาลคู่ขนาน 🪐", "💥 [Fanfic] ภารกิจป่วนโลก ⚡", "🌬️ [Fanfic] สายลมแห่งโชคชะตา 🍃", "⚔️ [Fanfic] การต่อสู้ครั้งใหม่ 🥊",
+                "💎 [Fanfic] หัวใจแห่งผู้กล้า 🛡️", "✨ [Fanfic] ปาฏิหาริย์แห่งรัก 🌸", "🤖 [Fanfic] รักในโลกอนาคต 🛸", "👽 [Fanfic] เพื่อนซี้ข้ามจักรวาล 🚀", "🎵 [Fanfic] บทเพลงแห่งโชคชะตา 🎼",
+                "🌑 [Fanfic] เงาแห่งความมืด 🕯️", "☀️ [Fanfic] แสงสว่างในหัวใจ 💖", "🎡 [Fanfic] การผจญภัยสุดป่วน 🎉", "👥 [Fanfic] เมื่อตัวละครมารวมตัวกัน 🌟", "💘 [Fanfic] รักนี้เพื่อเธอคนเดียว 🌹",
+                "🦸‍♀️ [Fanfic] รอยยิ้มของฮีโร่ ✨", "🪐 [Fanfic] ความลับแห่งจักรวาล 🌌", "🤝 [Fanfic] มิตรภาพตลอดไป 💞", "🎀 [Fanfic] สายใยรักไม่ขาดสะบั้น 💗", "🔥 [Fanfic] การกลับมาของจอมมาร 🏰",
+                "💫 [Fanfic] ชะตารักสองมิติ 🔮", "🎯 [Fanfic] ภารกิจสุดท้าทาย 💥", "🌱 [Fanfic] บทเรียนชีวิตในต่างโลก 🗺️", "🌺 [Fanfic] ความทรงจำอันงดงาม 🌸", "🎉 [Fanfic] บทสรุปแสนประทับใจ 💖"
+            ]
+        };
+
+        const allStories = [];
+        const notifications = [];
+        let globalId = 1;
+        let currentCategoryFilter = 'all';
+
+        // ฟังก์ชันสร้างชื่อตอนย่อยสมจริง
+        function getChapterSubtitle(chapterNum) {
+            const subtitles = [
+                "จุดเริ่มต้นของเรื่องราว 🌸", "สายลมแห่งการเปลี่ยนแปลง 🍃", "ความจริงที่ซ่อนอยู่ 🔮", 
+                "เงาแห่งอดีต 🌙", "การเผชิญหน้า 💥", "คำสัญญาในความมืด 🗝️", 
+                "แสงสว่างที่ปลายทาง 🌟", "การตัดสินใจครั้งสำคัญ 💖", "บทสรุปแห่งโชคชะตา 🎀", "รอยยิ้มสุดท้าย ✨"
+            ];
+            return subtitles[(chapterNum - 1) % subtitles.length];
+        }
+
+        // สร้างข้อมูลนิยาย 200 เรื่อง โดยมี 5-10 ตอนต่อเรื่องและบทบรรยายยาวพิเศษ
+        Object.keys(storyTitles).forEach(catKey => {
+            const titles = storyTitles[catKey];
+            const catNameMap = {
+                romantic: '🌸 โรแมนติก',
+                funny: '🐥 ตลก / สดใส',
+                warm: '🧸 อุ่นหัวใจ',
+                fanfic: '⭐ Fanfic'
+            };
+
+            titles.forEach((title, index) => {
+                const chapterCount = Math.floor(Math.random() * 6) + 5; // สุ่ม 5-10 ตอน
+                const generatedChapters = [];
+
+                for (let i = 1; i <= chapterCount; i++) {
+                    generatedChapters.push({
+                        title: `ตอนที่ ${i}: ${getChapterSubtitle(i)}`,
+                        content: `✨ เนื้อหาบทบรรยายแบบยาวพิเศษสำหรับ ตอนที่ ${i} ของเรื่อง "${title}" ✨\n\n` +
+                                 `🌸 สายลมยามเช้าพัดผ่านหน้าต่างกระจกใส เสียงใบไม้พลิ้วไหวตามแรงลมคล้ายกำลังร้องเพลงขับกล่อม ผู้คนในเมืองต่างเริ่มออกเดินทางตามเส้นทางของตนเอง ตัวละครหลักยืนมองภาพเหล่านั้นผ่านเงาสะท้อนด้วยความรู้สึกที่หลากหลาย ความทรงจำในอดีตเริ่มย้อนคืนกลับมาทีละน้อย...\n\n` +
+                                 `"ถ้าหากวันนั้นเราไม่ได้พบกัน เรื่องราวทั้งหมดนี้จะยังคงเกิดขึ้นหรือเปล่า?" คำถามนี้ยังคงวนเวียนอยู่ในหัวโดยไร้ซึ่งคำตอบ แต่ไม่ว่าจะอย่างไร การเดินทางในครั้งนี้ก็ต้องดำเนินต่อไป เหตุการณ์เริ่มเข้มข้นขึ้นเมื่ออุปสรรคใหม่ๆ เริ่มปรากฏขึ้นตรงหน้า การตัดสินใจครั้งสำคัญกำลังจะเกิดขึ้นในไม่ช้า...\n\n` +
+                                 `🎀 บรรยากาศรอบข้างเริ่มเงียบสงบลงเมื่อยามเย็นมาถึง แสงอาทิตย์ลับขอบฟ้าทอแสงสีส้มรำไรไปทั่วบริเวณ ทุกถ้อยคำและความรู้สึกถูกส่งผ่านการกระทำอย่างตั้งใจ บทสรุปของตอนนี้ทิ้งท้ายไว้ด้วยความประทับใจและความลึกลับที่รอการค้นหาในบทถัดไป...`
+                    });
+                }
+
+                const storyObj = {
+                    id: globalId,
+                    key: catKey,
+                    title: title,
+                    author: `นักเขียนคิ้วท์คนที่ ${index + 1} 🎀`,
+                    categoryName: catNameMap[catKey],
+                    views: `${(Math.random() * 50 + 5).toFixed(1)}k`,
+                    likes: Math.floor(Math.random() * 900 + 100),
+                    desc: `🎀 เรื่องราวแนว ${catNameMap[catKey]} เรื่อง "${title}" ผลงานบรรยายฉบับยาวพิเศษที่จะทำให้คุณเพลิดเพลิน อินกับทุกห้วงอารมณ์ เต็มอิ่มทั้งหมด ${chapterCount} ตอน...`,
+                    chapters: generatedChapters
+                };
+
+                allStories.push(storyObj);
+
+                if (index < 3) {
+                    notifications.push({
+                        story: storyObj,
+                        message: `📢 อัปเดตตอนใหม่: ตอนที่ ${chapterCount} เผยแพร่แล้ว!`,
+                        time: `${index + 1} ชม. ที่แล้ว`
+                    });
+                }
+
+                globalId++;
+            });
+        });
+let currentStoryObj = null;
+        let currentChapterIndex = 0;
+        let currentFontSize = 16;
+        let userShelf = [allStories[0], allStories[50], allStories[150]];
+
+        // ระบบค้นหา (Search System)
+        function handleSearch() {
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            renderStories(currentCategoryFilter, keyword);
+        }
+
+        // แสดงผลการ์ดนิยายตามหมวดหมู่และคำค้นหา
+        function renderStories(filterCategoryKey = 'all', searchQuery = '') {
+            currentCategoryFilter = filterCategoryKey;
+            const grid = document.getElementById('storyGrid');
+            grid.innerHTML = '';
+
+            let filtered = allStories;
+
+            if (filterCategoryKey !== 'all') {
+                filtered = filtered.filter(s => s.key === filterCategoryKey);
+            }
+
+            if (searchQuery !== '') {
+                filtered = filtered.filter(s => 
+                    s.title.toLowerCase().includes(searchQuery) || 
+                    s.author.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            document.getElementById('storyCountText').innerText = `แสดง ${filtered.length} เรื่อง`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px 0;">🐥 ไม่พบนิยายที่คุณค้นหาเลยน้า...</div>`;
+                return;
+            }
+
+            filtered.forEach(story => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => openDetail(story);
+                card.innerHTML = `
+                    <img src="https://picsum.photos/150/200?random=${story.id}" class="card-cover">
+                    <div class="card-info">
+                        <div class="card-title">${story.title}</div>
+                        <div class="card-author">👤 ${story.author}</div>
+                        <div class="card-stats">👁️ ${story.views} ❤️ ${story.likes}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // ระบบแก้ไขโปรไฟล์ (Profile System)
+        function openProfileModal() {
+            document.getElementById('profileNameInput').value = userProfile.name;
+            document.getElementById('profileBioInput').value = userProfile.bio;
+            document.getElementById('profileModal').classList.add('active');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('active');
+        }
+
+        function saveProfile() {
+            const newName = document.getElementById('profileNameInput').value.trim();
+            const newBio = document.getElementById('profileBioInput').value.trim();
+
+            if (!newName) {
+                alert('กรุณาระบุชื่อผู้แต่ง / นามปากกา');
+                return;
+            }
+
+            const oldName = userProfile.name;
+            userProfile.name = newName;
+            userProfile.bio = newBio;
+
+            allStories.forEach(s => {
+                if (s.author === oldName) {
+                    s.author = newName;
+                }
+            });
+
+            document.getElementById('headerProfileAvatar').innerText = '🐱';
+
+            closeProfileModal();
+            renderStories(currentCategoryFilter);
+            alert('✨ บันทึกข้อมูลโปรไฟล์สุดคิ้วท์เรียบร้อยแล้ว!');
+        }
+
+        // แสดงผล Fanfic Grid
+        function renderFanficGrid() {
+            const grid = document.getElementById('fanficGrid');
+            grid.innerHTML = '';
+
+            const fanfics = allStories.filter(s => s.key === 'fanfic');
+            fanfics.forEach(story => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => openDetail(story);
+                card.innerHTML = `
+                    <img src="https://picsum.photos/150/200?random=${story.id}" class="card-cover">
+                    <div class="card-info">
+                        <div class="card-title">${story.title}</div>
+                        <div class="card-author">👤 ${story.author}</div>
+                        <div class="card-stats">👁️ ${story.views} ❤️ ${story.likes}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+// แสดงผลชั้นหนังสือ
+        function renderShelf() {
+            const shelfEl = document.getElementById('shelfList');
+            shelfEl.innerHTML = '';
+            userShelf.forEach(story => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.onclick = () => openDetail(story);
+                item.innerHTML = `
+                    <img src="https://picsum.photos/150/200?random=${story.id}">
+                    <div class="list-content">
+                        <div class="card-title">${story.title}</div>
+                        <div class="card-author">หมวดหมู่: ${story.categoryName}</div>
+                        <div class="card-stats">มีรวม ${story.chapters.length} ตอน</div>
+                    </div>
+                    <span class="badge ${story.key === 'fanfic' ? 'badge-fanfic' : ''}">อ่านต่อ 💖</span>
+                `;
+                shelfEl.appendChild(item);
+            });
+        }
+
+        // แสดงรายการแจ้งเตือนนิยาย
+        function renderNotifications() {
+            const notifEl = document.getElementById('notificationList');
+            notifEl.innerHTML = '';
+            
+            notifications.forEach(notif => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.onclick = () => openDetail(notif.story);
+                item.innerHTML = `
+                    <img src="https://picsum.photos/150/200?random=${notif.story.id}">
+                    <div class="list-content">
+                        <div class="card-title">${notif.story.title}</div>
+                        <div class="card-author" style="color:#ff6b81;">${notif.message}</div>
+                        <div class="card-stats" style="color:#888;">${notif.time}</div>
+                    </div>
+                    <span class="badge ${notif.story.key === 'fanfic' ? 'badge-fanfic' : ''}">อ่าน 📖</span>
+                `;
+                notifEl.appendChild(item);
+            });
+        }
+
+        // ระบบแต่งนิยายเอง / เผยแพร่เรื่องใหม่
+        function publishNewStory() {
+            const title = document.getElementById('newTitle').value.trim();
+            const categoryKey = document.getElementById('newCategory').value;
+            const desc = document.getElementById('newDesc').value.trim();
+            const content = document.getElementById('newChapterContent').value.trim();
+
+            if (!title || !desc || !content) {
+                alert('กรุณากรอกข้อมูลให้ครบถ้วนก่อนเผยแพร่นะครับ ✨');
+                return;
+            }
+
+            const catNameMap = {
+                romantic: '🌸 โรแมนติก',
+                funny: '🐥 ตลก / สดใส',
+                warm: '🧸 อุ่นหัวใจ',
+                fanfic: '⭐ Fanfic'
+            };
+
+            const newStory = {
+                id: globalId++,
+                key: categoryKey,
+                title: title,
+                author: userProfile.name,
+                categoryName: catNameMap[categoryKey],
+                views: '0.1k',
+                likes: 1,
+                desc: desc,
+                chapters: [
+                    { title: 'ตอนที่ 1: บทนำน่ารัก 🎀', content: content }
+                ]
+            };
+
+            allStories.unshift(newStory);
+            userShelf.unshift(newStory);
+
+            notifications.unshift({
+                story: newStory,
+                message: '🎉 นิยายของคุณเผยแพร่สำเร็จแล้ว!',
+                time: 'เมื่อกี้'
+            });
+
+            document.getElementById('newTitle').value = '';
+            document.getElementById('newDesc').value = '';
+            document.getElementById('newChapterContent').value = '';
+
+            alert('🎉 เผยแพร่นิยายสุดน่ารักของคุณเรียบร้อยแล้ว!');
+            renderStories('all');
+            openDetail(newStory);
+        }
+
+        // เพิ่มตอนใหม่ให้กับเรื่องปัจจุบัน
+        function addChapterPrompt() {
+            if (!currentStoryObj) return;
+            const chTitle = prompt('พิมพ์ชื่อตอนใหม่น่ารักๆ:');
+            if (chTitle) {
+                const chContent = prompt('พิมพ์เนื้อเรื่องบทบรรยายยาวๆ:');
+                if (chContent) {
+                    currentStoryObj.chapters.push({
+                        title: chTitle,
+                        content: chContent
+                    });
+                    
+                    notifications.unshift({
+                        story: currentStoryObj,
+                        message: `✨ เพิ่มตอนใหม่: ${chTitle}`,
+                        time: 'เมื่อกี้'
+                    });
+
+                    openDetail(currentStoryObj);
+                    alert('✨ เพิ่มตอนใหม่เรียบร้อยแล้ว!');
+                }
+            }
+        }
+
+        // กรองหมวดหมู่
+        function filterCategory(element, catKey) {
+            document.querySelectorAll('.categories .tag').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+            
+            const categoryNames = {
+                'all': '🌈 นิยายทั้งหมด',
+                'romantic': '🌸 หมวดหมู่: โรแมนติก',
+                'funny': '🐥 หมวดหมู่: ตลก / สดใส',
+                'warm': '🧸 หมวดหมู่: อุ่นหัวใจ',
+                'fanfic': '⭐ หมวดหมู่: Fanfic'
+            };
+            document.getElementById('categoryTitle').innerText = categoryNames[catKey];
+            
+            const searchKeyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            renderStories(catKey, searchKeyword);
+        }
+// สลับหน้า Navigation Bottom
+        function switchNav(element, viewId) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+
+            document.querySelectorAll('.view-page').forEach(page => page.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+
+            if (viewId === 'readingView') {
+                renderShelf();
+            } else if (viewId === 'fanficView') {
+                renderFanficGrid();
+            } else if (viewId === 'activityView') {
+                renderNotifications();
+                document.getElementById('notifBadge').style.display = 'none';
+            }
+        }
+
+        // เปิดหน้าสารบัญเรื่อง
+        function openDetail(story) {
+            currentStoryObj = story;
+            document.getElementById('detailTitle').innerText = story.title;
+            document.getElementById('detailAuthor').innerText = 'ผู้แต่ง: ' + story.author;
+            document.getElementById('detailDesc').innerText = story.desc;
+
+            const chapterListEl = document.getElementById('chapterList');
+            chapterListEl.innerHTML = '';
+
+            story.chapters.forEach((ch, index) => {
+                const item = document.createElement('div');
+                item.className = 'chapter-item';
+                item.innerHTML = `<div>${ch.title}</div><span class="badge ${story.key === 'fanfic' ? 'badge-fanfic' : ''}">อ่าน 📖</span>`;
+                item.onclick = () => openReader(index);
+                chapterListEl.appendChild(item);
+            });
+
+            document.getElementById('detailPage').classList.add('active');
+        }
+
+        function closeDetailPage() {
+            document.getElementById('detailPage').classList.remove('active');
+        }
+
+        function addToShelfCurrent() {
+            if (!userShelf.find(s => s.id === currentStoryObj.id)) {
+                userShelf.push(currentStoryObj);
+                alert('💖 เพิ่มเข้าชั้นหนังสือสุดเลิฟเรียบร้อยแล้ว!');
+            } else {
+                alert('เรื่องนี้อยู่ในชั้นหนังสือของคุณแล้วน้า');
+            }
+        }
+
+        // เปิดหน้าอ่านเนื้อหาจริง
+        function openReader(chapterIndex) {
+            currentChapterIndex = chapterIndex;
+            const chapter = currentStoryObj.chapters[chapterIndex];
+
+            document.getElementById('readerChapterTitle').innerText = chapter.title;
+            document.getElementById('readerBody').innerText = chapter.content;
+
+            document.getElementById('prevBtn').style.display = chapterIndex > 0 ? 'block' : 'none';
+            document.getElementById('nextBtn').style.display = chapterIndex < currentStoryObj.chapters.length - 1 ? 'block' : 'none';
+
+            document.getElementById('readerPage').classList.add('active');
+            document.getElementById('readerPage').scrollTop = 0;
+        }
+
+        function closeReaderPage() {
+            document.getElementById('readerPage').classList.remove('active');
+        }
+
+        function navigateChapter(direction) {
+            const newIndex = currentChapterIndex + direction;
+            if (newIndex >= 0 && newIndex < currentStoryObj.chapters.length) {
+                openReader(newIndex);
+            }
+        }
+
+        function changeFontSize(delta) {
+            currentFontSize += delta;
+            if (currentFontSize < 12) currentFontSize = 12;
+            if (currentFontSize > 26) currentFontSize = 26;
+            document.getElementById('readerBody').style.fontSize = currentFontSize + 'px';
+        }
+
+        // เริ่มต้นแสดงผล 200 เรื่อง
+        renderStories('all');
+    </script>
+</body>
+</html>
