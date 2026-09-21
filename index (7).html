@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เกมคณิตคิดเร็ว</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#4facfe,#00f2fe);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    background:white;
+    width:400px;
+    max-width:90%;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+    text-align:center;
+}
+
+h1{
+    margin-bottom:20px;
+    color:#333;
+}
+
+.info{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.question{
+    font-size:38px;
+    margin:20px 0;
+    color:#222;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    font-size:24px;
+    text-align:center;
+    border:2px solid #ddd;
+    border-radius:10px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#2196F3;
+}
+
+button{
+    margin-top:20px;
+    width:100%;
+    padding:15px;
+    font-size:20px;
+    border:none;
+    border-radius:10px;
+    background:#2196F3;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1976D2;
+}
+
+#message{
+    margin-top:15px;
+    font-size:22px;
+    font-weight:bold;
+    height:30px;
+}
+
+.gameover{
+    color:red;
+    font-size:28px;
+    margin-top:20px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🧮 เกมคณิตคิดเร็ว</h1>
+
+<div class="info">
+<div>⏰ <span id="time">60</span>s</div>
+<div>⭐ <span id="score">0</span></div>
+</div>
+
+<div class="question" id="question">
+5 + 5
+</div>
+
+<input type="number" id="answer" placeholder="พิมพ์คำตอบ">
+
+<button onclick="checkAnswer()">ตอบ</button>
+
+<div id="message"></div>
+
+<button onclick="startGame()">เริ่มใหม่</button>
+
+</div>
+
+<script>
+
+let score=0;
+let time=60;
+let timer;
+
+let correctAnswer=0;
+
+function random(min,max){
+    return Math.floor(Math.random()*(max-min+1))+min;
+}
+
+function newQuestion(){
+
+    let a=random(1,20);
+    let b=random(1,20);
+
+    let op=random(1,4);
+
+    switch(op){
+
+        case 1:
+            correctAnswer=a+b;
+            document.getElementById("question").innerHTML=`${a} + ${b}`;
+        break;
+
+        case 2:
+            if(a<b)[a,b]=[b,a];
+            correctAnswer=a-b;
+            document.getElementById("question").innerHTML=`${a} - ${b}`;
+        break;
+
+        case 3:
+            a=random(1,12);
+            b=random(1,12);
+            correctAnswer=a*b;
+            document.getElementById("question").innerHTML=`${a} × ${b}`;
+        break;
+
+        case 4:
+            b=random(1,12);
+            correctAnswer=random(1,12);
+            a=b*correctAnswer;
+            document.getElementById("question").innerHTML=`${a} ÷ ${b}`;
+        break;
+
+    }
+
+    document.getElementById("answer").value="";
+    document.getElementById("answer").focus();
+
+}
+
+function checkAnswer(){
+
+    if(time<=0)return;
+
+    let ans=Number(document.getElementById("answer").value);
+
+    if(ans===correctAnswer){
+
+        score++;
+        document.getElementById("score").innerHTML=score;
+
+        document.getElementById("message").style.color="green";
+        document.getElementById("message").innerHTML="✔ ถูกต้อง";
+
+    }else{
+
+        document.getElementById("message").style.color="red";
+        document.getElementById("message").innerHTML="✖ ผิด";
+
+    }
+
+    newQuestion();
+
+}
+
+function startGame(){
+
+    clearInterval(timer);
+
+    score=0;
+    time=60;
+
+    document.getElementById("score").innerHTML=score;
+    document.getElementById("time").innerHTML=time;
+    document.getElementById("message").innerHTML="";
+
+    newQuestion();
+
+    timer=setInterval(()=>{
+
+        time--;
+
+        document.getElementById("time").innerHTML=time;
+
+        if(time<=0){
+
+            clearInterval(timer);
+
+            document.getElementById("question").innerHTML="🎉 จบเกม";
+
+            document.getElementById("message").innerHTML=
+            `คะแนนของคุณ = ${score}`;
+
+        }
+
+    },1000);
+
+}
+
+document.getElementById("answer").addEventListener("keypress",function(e){
+
+    if(e.key==="Enter"){
+        checkAnswer();
+    }
+
+});
+
+startGame();
+
+</script>
+
+</body>
+</html>
