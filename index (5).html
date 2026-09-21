@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GALAXY ULTIMATE MATH ARENA 2026</title>
+    <style>
+        /* ==================== HYPER-FUTURISTIC GALACTIC CORE ==================== */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Kanit:wght@300;400;600;800&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kanit', 'Orbitron', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: #020208;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #space-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #flash-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 99;
+            opacity: 0;
+            transition: opacity 0.15s ease-out;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 95%;
+            max-width: 1100px;
+            background: rgba(8, 12, 28, 0.88);
+            border: 2px solid rgba(0, 243, 255, 0.6);
+            border-radius: 28px;
+            box-shadow: 
+                0 0 30px rgba(0, 243, 255, 0.3),
+                inset 0 0 30px rgba(255, 0, 247, 0.2),
+                0 25px 60px rgba(0, 0, 0, 0.9);
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            text-align: center;
+            margin: 15px 0;
+            animation: holoPulse 6s infinite alternate;
+        }
+
+        @keyframes holoPulse {
+            0% { border-color: rgba(0, 243, 255, 0.6); box-shadow: 0 0 30px rgba(0, 243, 255, 0.3), inset 0 0 20px rgba(255, 0, 247, 0.2); }
+            100% { border-color: rgba(255, 0, 247, 0.8); box-shadow: 0 0 45px rgba(255, 0, 247, 0.5), inset 0 0 35px rgba(0, 243, 255, 0.3); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', 'Kanit', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #00f3ff 0%, #ffffff 35%, #ff00f7 70%, #ffe600 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 243, 255, 0.8);
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', 'Kanit', sans-serif;
+            font-size: 2rem;
+            color: #00f3ff;
+            text-shadow: 0 0 15px rgba(0, 243, 255, 0.7);
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            position: relative;
+            background: linear-gradient(135deg, rgba(10, 25, 50, 0.9), rgba(40, 10, 60, 0.9));
+            border: 2px solid #00f3ff;
+            color: #fff;
+            padding: 14px 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            margin: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: uppercase;
+            overflow: hidden;
+        }
+
+.btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before { left: 100%; }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: linear-gradient(135deg, #00f3ff, #b700ff);
+            border-color: #fff;
+            color: #000;
+            box-shadow: 0 0 30px #00f3ff, 0 0 60px #b700ff;
+        }
+
+        .btn-success { border-color: #00ff88 !important; box-shadow: 0 0 15px rgba(0, 255, 136, 0.4) !important; }
+        .btn-success:hover { background: #00ff88 !important; color: #000 !important; box-shadow: 0 0 35px #00ff88 !important; }
+
+        .btn-danger { border-color: #ff0055 !important; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4) !important; color: #ff0055 !important; }
+        .btn-danger:hover { background: #ff0055 !important; color: #fff !important; box-shadow: 0 0 35px #ff0055 !important; }
+
+        .screen { display: none; }
+        .screen.active { display: block; animation: zoomIn 0.35s ease-out; }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        input, select {
+            background: rgba(5, 10, 25, 0.9);
+            border: 2px solid #ff00f7;
+            color: #00f3ff;
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            outline: none;
+            margin: 6px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 0, 247, 0.3);
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #00f3ff;
+            box-shadow: 0 0 25px #00f3ff;
+        }
+
+        .hud {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(0, 5, 20, 0.7);
+            padding: 12px 16px;
+            border-radius: 22px;
+            border: 1px solid rgba(0, 243, 255, 0.5);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        .coin-box { color: #ffd700; text-shadow: 0 0 15px #ffd700; font-family: 'Orbitron'; }
+        .stars-box { color: #ff0055; font-size: 1.5rem; letter-spacing: 3px; text-shadow: 0 0 10px #ff0055; }
+
+        .arena {
+            position: relative;
+            height: 180px;
+            background: radial-gradient(ellipse at center, rgba(30,35,80,0.7) 0%, rgba(5,5,20,0.95) 100%);
+            border-radius: 22px;
+            border: 2px solid rgba(255, 0, 247, 0.5);
+            margin: 15px 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .character {
+            font-size: 4rem;
+            position: relative;
+            z-index: 3;
+            filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.8));
+            animation: float 2.8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+
+        .bullet {
+            position: absolute;
+            height: 10px;
+            background: linear-gradient(90deg, #ff00f7, #00f3ff, #ffffff);
+            box-shadow: 0 0 20px #00f3ff, 0 0 35px #ff00f7;
+            border-radius: 5px;
+            z-index: 4;
+            display: none;
+        }
+
+        .rope-container {
+            position: absolute;
+            width: 70%;
+            left: 15%;
+            height: 12px;
+            background: linear-gradient(90deg, #00f3ff, #ff00f7, #00f3ff);
+            border-radius: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 15px #00f3ff;
+            z-index: 1;
+        }
+        .rope-knot {
+            position: absolute;
+            width: 38px;
+            height: 38px;
+            background: radial-gradient(circle, #ffe600, #ff0055);
+            border-radius: 50%;
+            top: -13px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 25px #ffe600;
+            transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+        }
+
+        .math-card {
+            background: rgba(12, 15, 40, 0.95);
+            border: 2px solid #00f3ff;
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.35);
+            margin-bottom: 15px;
+        }
+
+        .question {
+            font-family: 'Orbitron', 'Kanit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00f3ff, #ffffff, #ff00f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+        }
+
+        .grid-container {
+            display: grid;
+            gap: 10px;
+            max-width: 750px;
+            margin: 15px auto;
+            max-height: 420px;
+            overflow-y: auto;
+            padding: 12px;
+            border-radius: 16px;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .grid-btn {
+            background: rgba(15, 25, 50, 0.85);
+            border: 2px solid #00f3ff;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 14px 0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+.grid-btn:hover {
+            background: #00f3ff;
+            color: #000;
+            box-shadow: 0 0 20px #00f3ff;
+            transform: scale(1.08);
+        }
+
+        .grid-btn.found {
+            background: rgba(0, 255, 136, 0.25);
+            border-color: #00ff88;
+            color: #00ff88;
+            cursor: default;
+        }
+
+        .pvp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .pvp-card {
+            background: rgba(5, 10, 30, 0.8);
+            padding: 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 243, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .building-arena {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 10px 0;
+        }
+
+        .building-column {
+            background: rgba(10, 15, 35, 0.85);
+            border: 2px solid rgba(0, 243, 255, 0.4);
+            border-radius: 20px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .building-visual-container {
+            width: 100%;
+            height: 180px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 14px;
+            border: 1px dashed rgba(0, 243, 255, 0.3);
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            overflow-y: auto;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        .building-floor {
+            width: 85%;
+            height: 24px;
+            margin: 2px 0;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #00f3ff, #00ff88);
+            box-shadow: 0 0 12px #00f3ff;
+            animation: buildUp 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0;
+        }
+
+        .team2-floor {
+            background: linear-gradient(90deg, #ff00f7, #ff0055) !important;
+            box-shadow: 0 0 12px #ff00f7 !important;
+        }
+
+        @keyframes buildUp {
+            from { transform: translateY(-20px) scale(0.3); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        /* ==================== ON-SCREEN KEYPAD (DUAL TOUCH) ==================== */
+        .touch-numpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .np-btn {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid #00f3ff;
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.1s active;
+            touch-action: manipulation;
+        }
+
+        .np-btn:active {
+            background: #00f3ff;
+            color: #000;
+            transform: scale(0.95);
+        }
+
+        .np-btn-del {
+            border-color: #ff0055;
+            color: #ff0055;
+            background: rgba(255, 0, 85, 0.1);
+        }
+        .np-btn-del:active {
+            background: #ff0055;
+            color: #fff;
+        }
+
+        .np-btn-enter {
+            grid-column: span 3;
+            background: linear-gradient(135deg, #00f3ff, #00ff88);
+            color: #000;
+            border: none;
+            font-size: 1.2rem;
+            padding: 12px 0;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+        }
+
+        .p2-keypad .np-btn {
+            border-color: #ff00f7;
+            background: rgba(255, 0, 247, 0.1);
+        }
+        .p2-keypad .np-btn:active {
+            background: #ff00f7;
+            color: #000;
+        }
+        .p2-keypad .np-btn-enter {
+            background: linear-gradient(135deg, #ff00f7, #ff0055);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 247, 0.4);
+        }
+
+        @media (min-width: 1025px) {
+            .touch-numpad { display: none; }
+        }
+
+        @media (max-width: 1024px) {
+            .controls-hint { display: none; }
+        }
+
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin: 18px 0;
+        }
+
+        .level-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid #00f3ff;
+            padding: 18px;
+            border-radius: 18px;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+        .level-card.locked {
+            border-color: #444;
+            opacity: 0.45;
+        }
+
+.stats-matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .stat-panel {
+            background: rgba(10, 18, 42, 0.85);
+            border: 1px solid rgba(0, 243, 255, 0.4);
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6);
+            transition: transform 0.2s;
+        }
+
+        .stat-panel:hover {
+            transform: translateY(-3px);
+            border-color: #00f3ff;
+        }
+
+        .stat-panel h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-panel p {
+            font-size: 0.98rem;
+            color: #d0dbe5;
+            margin: 6px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-panel p span {
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .stat-result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+        }
+
+        @keyframes shake {
+            0% { transform: translate(3px, 3px); }
+            50% { transform: translate(-5px, -3px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        .hit-shake { animation: shake 0.4s; filter: drop-shadow(0 0 30px #ff0000) !important; }
+        
+        .controls-hint {
+            font-size: 0.8rem;
+            color: #ffd700;
+            margin-top: 5px;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="space-canvas"></canvas>
+    <div class="scanlines"></div>
+    <div id="flash-overlay"></div>
+
+    <div class="container">
+        <div id="screen-home" class="screen active">
+            <h1>🚀 GALAXY SHOWDOWN 🌌</h1>
+            <p style="margin-bottom: 25px; color: #a0aec0; font-size: 1.2rem;">มหาศึกประลองความคิดเลขเร็วทะลุจักรวาล 2026</p>
+            
+            <div style="margin: 25px 0;">
+                <button class="btn" onclick="soundEffect('click'); showScreen('screen-mode-select')">🎮 โหมดคิดเลขเร็ว (Single/PvP)</button>
+                <button class="btn" onclick="soundEffect('click'); showScreen('screen-building-setup')">🏙️ โหมดสร้างตึกแข่งกัน (2 ทีม)</button>
+                <button class="btn" onclick="soundEffect('click'); showScreen('screen-grid-setup')">🔍 โหมดค้นหาตัวเลข (Grid)</button>
+                <br>
+                <button class="btn" onclick="soundEffect('click'); showScreen('screen-custom')">✏️ กำหนดโจทย์เอง</button>
+                <button class="btn" onclick="soundEffect('click'); showScreen('screen-shop')">🛸 ร้านค้าด่าน</button>
+                <button class="btn" onclick="soundEffect('click'); showScreen('screen-stats')">📊 สถิติการเล่นแบบละเอียด</button>
+            </div>
+            
+            <div class="hud" style="max-width: 320px; margin: 0 auto;">
+                <div class="coin-box">🪙 เหรียญที่มี: <span id="home-coins">0</span></div>
+            </div>
+        </div>
+
+        <div id="screen-mode-select" class="screen">
+            <h2>⚡ เลือกโหมดคิดเลขเร็ว ⚡</h2>
+            <div style="margin: 30px 0;">
+                <button class="btn" onclick="soundEffect('click'); selectMode('single')">👤 เล่นคนเดียว (Single Player)</button>
+                <button class="btn" onclick="soundEffect('click'); selectMode('pvp')">⚔️ ประลองชักเย่อ 2 คน (Tug of War)</button>
+            </div>
+            <button class="btn btn-danger" onclick="soundEffect('click'); showScreen('screen-home')">🔙 ย้อนกลับ</button>
+        </div>
+
+        <div id="screen-single-setup" class="screen">
+            <h2>⚙️ ตั้งค่าโหมดเล่นคนเดียว</h2>
+            <div style="margin: 15px 0;">
+                <label>ความยาก:</label>
+                <select id="single-diff">
+                    <option value="easy">🟢 ง่าย (บวก-ลบ 1 หลัก)</option>
+                    <option value="medium">🟡 ปานกลาง (บวก-ลบ-คูณ 2 หลัก)</option>
+                    <option value="hard">🔴 ยาก (บวก-ลบ-คูณ-หาร)</option>
+                    <option value="expert">🟣 ยากมาก (โจทย์ผสมซับซ้อน)</option>
+                </select>
+            </div>
+            <div style="margin: 15px 0;">
+                <label>เวลาในการเล่น:</label>
+                <select id="single-time">
+                    <option value="60">⏱️ 60 วินาที</option>
+                    <option value="90" selected>⏱️ 90 วินาที</option>
+                    <option value="120">⏱️ 120 วินาที</option>
+                </select>
+            </div>
+            <div style="margin: 15px 0;">
+                <label>จำนวนข้อสูงสุด (1-50):</label>
+                <input type="number" id="single-max-q" value="20" min="1" max="50">
+            </div>
+            <button class="btn btn-success" onclick="soundEffect('click'); startSingleGame()">🚀 เริ่มลุย!</button>
+            <button class="btn btn-danger" onclick="soundEffect('click'); showScreen('screen-mode-select')">ย้อนกลับ</button>
+        </div>
+
+        <div id="screen-pvp-setup" class="screen">
+            <h2>⚔️ ตั้งค่าโหมดชักเย่อ 2 คน</h2>
+            <div style="margin: 15px 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                <div>
+                    <label style="color:#00f3ff;">ชื่อผู้เล่น 1 (ซ้าย):</label><br>
+                    <input type="text" id="pvp-name-p1" value="ผู้เล่น 1" style="width: 180px;">
+                </div>
+                <div>
+                    <label style="color:#ff00f7;">ชื่อผู้เล่น 2 (ขวา):</label><br>
+                    <input type="text" id="pvp-name-p2" value="ผู้เล่น 2" style="width: 180px;">
+                </div>
+            </div>
+<div style="margin: 15px 0;">
+                <label>เวลาแข่งขัน:</label>
+                <select id="pvp-time">
+                    <option value="60">⏱️ 60 วินาที</option>
+                    <option value="90" selected>⏱️ 90 วินาที</option>
+                    <option value="120">⏱️ 120 วินาที</option>
+                </select>
+            </div>
+            <div style="margin: 15px 0;">
+                <label>จำนวนข้อรวม (1-50):</label>
+                <input type="number" id="pvp-max-q" value="30" min="1" max="50">
+            </div>
+            <button class="btn btn-success" onclick="soundEffect('click'); startPvpGame()">💥 เริ่มศึก!</button>
+            <button class="btn btn-danger" onclick="soundEffect('click'); showScreen('screen-mode-select')">ย้อนกลับ</button>
+        </div>
+
+        <div id="screen-building-setup" class="screen">
+            <h2>🏙️ ตั้งค่าเกมสร้างตึกแข่งกัน (Building Battle)</h2>
+            <p style="color:#a0aec0; margin-bottom:15px;">ตอบถูกสร้างตึก 1 ชั้น | ตอบผิดตึกโดนทุบลง 1 ชั้น</p>
+            <div style="margin: 15px 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                <div>
+                    <label style="color:#00f3ff;">ชื่อทีม 1 (ซ้าย):</label><br>
+                    <input type="text" id="bldg-name-t1" value="ทีม 1" style="width: 180px;">
+                </div>
+                <div>
+                    <label style="color:#ff00f7;">ชื่อทีม 2 (ขวา):</label><br>
+                    <input type="text" id="bldg-name-t2" value="ทีม 2" style="width: 180px;">
+                </div>
+            </div>
+            <div style="margin: 15px 0;">
+                <label>จับเวลาการแข่งขัน:</label>
+                <select id="building-time">
+                    <option value="60">⏱️ 60 วินาที</option>
+                    <option value="90" selected>⏱️ 90 วินาที</option>
+                    <option value="100">⏱️ 100 วินาที</option>
+                    <option value="120">⏱️ 120 วินาที</option>
+                </select>
+            </div>
+            <div style="margin: 15px 0;">
+                <label>จำนวนข้อที่ต้องตอบ:</label>
+                <select id="building-max-q">
+                    <option value="10">10 ข้อ</option>
+                    <option value="15">15 ข้อ</option>
+                    <option value="20" selected>20 ข้อ</option>
+                    <option value="30">30 ข้อ</option>
+                </select>
+            </div>
+            <button class="btn btn-success" onclick="soundEffect('click'); startBuildingGame()">🏢 เริ่มสร้างตึกประลอง!</button>
+            <button class="btn btn-danger" onclick="soundEffect('click'); showScreen('screen-home')">ย้อนกลับ</button>
+        </div>
+
+        <div id="screen-grid-setup" class="screen">
+            <h2>🔍 ตั้งค่าเกมค้นหาตัวเลข (Grid Challenge)</h2>
+            <p style="color:#a0aec0; margin-bottom:10px;">ค้นหาตัวเลขเรียงตามลำดับให้ครบก่อนเวลาหมด!</p>
+            <div style="margin: 15px 0;">
+                <label>ช่วงตัวเลข:</label>
+                <select id="grid-range">
+                    <option value="20">1 ถึง 20</option>
+                    <option value="40">1 ถึง 40</option>
+                    <option value="60">1 ถึง 60</option>
+                    <option value="80">1 ถึง 80</option>
+                    <option value="100">1 ถึง 100</option>
+                </select>
+            </div>
+            <div style="margin: 15px 0;">
+                <label>เวลาในการเล่น:</label>
+                <select id="grid-time">
+                    <option value="60">⏱️ 1 นาที (60s)</option>
+                    <option value="180">⏱️ 3 นาที (180s)</option>
+                    <option value="300">⏱️ 5 นาที (300s)</option>
+                    <option value="600">⏱️ 10 นาที (600s)</option>
+                    <option value="900">⏱️ 15 นาที (900s)</option>
+                </select>
+            </div>
+            <p style="color:#ff0055;">❤️ หัวใจเริ่มต้น: 4 ดวง (กดผิดครบ 4 ครั้งแพ้ทันที)</p>
+            <br>
+            <button class="btn btn-success" onclick="soundEffect('click'); startGridGame()">🎯 เริ่มค้นหาตัวเลข!</button>
+            <button class="btn btn-danger" onclick="soundEffect('click'); showScreen('screen-home')">ย้อนกลับ</button>
+        </div>
+
+        <div id="screen-custom" class="screen">
+            <h2>✏️ คลังโจทย์กำหนดเอง</h2>
+            <div id="custom-inputs" style="max-height: 220px; overflow-y: auto; margin: 15px 0;"></div>
+            <button class="btn" onclick="soundEffect('click'); addCustomRow()">+ เพิ่มข้อใหม่</button>
+            <button class="btn btn-success" onclick="soundEffect('click'); startCustomGame()">🚀 เริ่มเล่นโจทย์นี้</button>
+            <button class="btn btn-danger" onclick="soundEffect('click'); showScreen('screen-home')">ย้อนกลับ</button>
+        </div>
+
+        <div id="screen-shop" class="screen">
+            <h2>🛸 ร้านค้าด่านกาแล็กซี่</h2>
+            <div class="hud" style="max-width: 280px; margin: 10px auto;">
+                <div class="coin-box">🪙 เหรียญที่มี: <span id="shop-coins">0</span></div>
+            </div>
+            <div class="level-grid">
+                <div class="level-card">
+                    <h3>🌌 ด่าน 1: ทางช้างเผือก</h3>
+                    <p style="color: #00f3ff; margin-top: 5px;">ปลดล็อกแล้ว</p>
+                </div>
+                <div id="stage-2-card" class="level-card locked">
+                    <h3>🪐 ด่าน 2: วงแหวนดาวเสาร์</h3>
+                    <p>ราคา: 20 🪙</p>
+                    <button id="btn-unlock-2" class="btn" onclick="soundEffect('click'); unlockStage(2, 20)">ปลดล็อก</button>
+                </div>
+                <div id="stage-3-card" class="level-card locked">
+                    <h3>☄️ ด่าน 3: ฝนดาวตก</h3>
+                    <p>ราคา: 50 🪙</p>
+                    <button id="btn-unlock-3" class="btn" onclick="soundEffect('click'); unlockStage(3, 50)">ปลดล็อก</button>
+                </div>
+                <div id="stage-4-card" class="level-card locked">
+                    <h3>🕳️ ด่าน 4: ขอบหลุมดำ</h3>
+                    <p>ราคา: 100 🪙</p>
+                    <button id="btn-unlock-4" class="btn" onclick="soundEffect('click'); unlockStage(4, 100)">ปลดล็อก</button>
+                </div>
+            </div>
+            <button class="btn btn-danger" onclick="soundEffect('click'); showScreen('screen-home')">ย้อนกลับ</button>
+        </div>
+
+<div id="screen-stats" class="screen">
+            <h2>📊 สถิติการรบกาแล็กซี่แบบละเอียด</h2>
+            
+            <div class="stats-matrix-grid">
+                <div class="stat-panel">
+                    <h3 style="color: #00f3ff;">👤 เล่นคนเดียว (Single Player)</h3>
+                    <p>🎮 แมตช์ที่เล่น: <span id="stat-single-games">0</span></p>
+                    <p>🏆 ชนะ: <span id="stat-single-wins" style="color:#00ff88;">0</span> | 💥 แพ้: <span id="stat-single-losses" style="color:#ff0055;">0</span></p>
+                    <p>✅ ตอบถูก: <span id="stat-single-correct" style="color:#00ff88;">0</span> ข้อ</p>
+                    <p>❌ ตอบผิด: <span id="stat-single-wrong" style="color:#ff0055;">0</span> ข้อ</p>
+                    <p>🎯 คะแนนสะสม: <span id="stat-single-score" style="color:#ffd700;">0</span></p>
+                </div>
+
+                <div class="stat-panel">
+                    <h3 style="color: #ff00f7;">⚔️ ประลองชักเย่อ (Tug of War)</h3>
+                    <p>🎮 แมตช์ที่เล่น: <span id="stat-pvp-games">0</span></p>
+                    <p>👨‍🚀 P1 ชนะ: <span id="stat-pvp-p1wins" style="color:#00f3ff;">0</span> | 👾 P2 ชนะ: <span id="stat-pvp-p2wins" style="color:#ff00f7;">0</span></p>
+                    <p>🤝 เสมอกัน: <span id="stat-pvp-draws" style="color:#ffe600;">0</span></p>
+                    <p>✅ ตอบถูกรวม: <span id="stat-pvp-correct" style="color:#00ff88;">0</span> ข้อ</p>
+                    <p>❌ ตอบผิดรวม: <span id="stat-pvp-wrong" style="color:#ff0055;">0</span> ข้อ</p>
+                </div>
+
+                <div class="stat-panel">
+                    <h3 style="color: #ffe600;">🏙️ ประลองสร้างตึก (Building Battle)</h3>
+                    <p>🎮 แมตช์ที่เล่น: <span id="stat-bldg-games">0</span></p>
+                    <p>🔵 ทีม 1 ชนะ: <span id="stat-bldg-t1wins" style="color:#00f3ff;">0</span> | 🔴 ทีม 2 ชนะ: <span id="stat-bldg-t2wins" style="color:#ff00f7;">0</span></p>
+                    <p>🤝 เสมอกัน: <span id="stat-bldg-draws" style="color:#ffe600;">0</span></p>
+                    <p>🏙️ ตึกที่สูงที่สุดที่เคยสร้าง: <span id="stat-bldg-maxheight" style="color:#00ff88;">0</span> ชั้น</p>
+                </div>
+
+                <div class="stat-panel">
+                    <h3 style="color: #00ff88;">🔍 ค้นหาตัวเลข (Grid Finder)</h3>
+                    <p>🎮 เกมที่เล่น: <span id="stat-grid-games">0</span></p>
+                    <p>🏆 พิชิตสำเร็จ: <span id="stat-grid-wins" style="color:#00ff88;">0</span> | 💥 ล้มเหลว: <span id="stat-grid-losses" style="color:#ff0055;">0</span></p>
+                    <p>🔢 กดเลขถูกต้องรวม: <span id="stat-grid-correct" style="color:#00ff88;">0</span> ครั้ง</p>
+                    <p>❌ กดผิดพลาดรวม: <span id="stat-grid-wrong" style="color:#ff0055;">0</span> ครั้ง</p>
+                    <p>⏱️ เวลาดีที่สุด: <span id="stat-grid-besttime" style="color:#00f3ff;">--</span></p>
+                </div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 15px; border-radius: 16px; border: 1px dashed #00f3ff; margin-bottom: 20px;">
+                <p style="font-size: 1.1rem; color: #ffd700;">🪙 เหรียญรวมทั้งหมดที่ได้รับ: <span id="stat-global-coins" style="font-family:'Orbitron'; font-weight:bold;">0</span> 🪙</p>
+            </div>
+
+            <button class="btn btn-danger" onclick="soundEffect('click'); resetStats()">🧹 ล้างสถิติทั้งหมด</button>
+            <button class="btn" onclick="soundEffect('click'); showScreen('screen-home')">🔙 ย้อนกลับหน้าหลัก</button>
+        </div>
+
+        <div id="screen-single-game" class="screen">
+            <div class="hud">
+                <div>⏱️ <span id="single-timer" style="color:#00f3ff; font-family:'Orbitron';">90</span>s</div>
+                <div class="stars-box" id="single-lives">⭐⭐⭐⭐</div>
+                <div class="coin-box">🪙 <span id="single-coins">0</span></div>
+            </div>
+
+            <div class="arena">
+                <div id="single-turret" style="font-size: 3.5rem; transform: scaleX(-1);">🤖</div>
+                <div id="single-bullet" class="bullet"></div>
+                <div id="single-player-char" class="character">👨‍🚀</div>
+            </div>
+
+            <div class="math-card">
+                <div class="question" id="single-q">1 + 1 = ?</div>
+                <input type="number" id="single-ans" placeholder="คำตอบ" style="font-size: 1.8rem; width: 180px;">
+                <br>
+                <button class="btn btn-success" onclick="checkSingleAnswer()">ส่งคำตอบ 🚀 (Enter)</button>
+            </div>
+            <p style="color: #a0aec0;">ข้อที่: <span id="single-q-count">1</span> / <span id="single-q-max">20</span></p>
+        </div>
+
+        <div id="screen-pvp-game" class="screen">
+            <div class="hud">
+                <div style="color: #00f3ff;"><span id="pvp-p1-label">P1</span>: <span id="pvp-p1-score">0</span></div>
+                <div>⏱️ <span id="pvp-timer" style="color:#ff00f7; font-family:'Orbitron';">90</span>s</div>
+                <div style="color: #ff0055;"><span id="pvp-p2-label">P2</span>: <span id="pvp-p2-score">0</span></div>
+            </div>
+
+            <div class="arena">
+                <div class="character" id="pvp-p1-char">👨‍🚀</div>
+                <div class="rope-container">
+                    <div id="rope-knot" class="rope-knot"></div>
+                </div>
+                <div class="character" id="pvp-p2-char">👾</div>
+            </div>
+
+<div class="pvp-grid">
+                <div class="pvp-card">
+                    <h3 id="pvp-card-p1-name" style="color:#00f3ff;">ผู้เล่น 1 (ซ้าย)</h3>
+                    <div class="stars-box" id="pvp-p1-lives">⭐⭐⭐⭐</div>
+                    <div class="question" style="font-size:2rem;" id="pvp-p1-q">1+1</div>
+                    <input type="text" id="pvp-p1-ans" style="width:140px; font-size:1.8rem;" readonly>
+                    <br>
+                    <button class="btn controls-hint-btn" onclick="checkPvpAnswer(1)">ตอบ</button>
+                    <div class="controls-hint">
+                        ⌨️ <b>คีย์บอร์ดซ้าย:</b> เลข [1-0] บนแถบหลัก<br>
+                        [Backspace] ลบ | [Enter] ส่งคำตอบ
+                    </div>
+
+                    <div class="touch-numpad p1-keypad">
+                        <button class="np-btn" onclick="pressNumpad('pvp-p1-ans', '1')">1</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p1-ans', '2')">2</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p1-ans', '3')">3</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p1-ans', '4')">4</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p1-ans', '5')">5</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p1-ans', '6')">6</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p1-ans', '7')">7</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p1-ans', '8')">8</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p1-ans', '9')">9</button>
+                        <button class="np-btn np-btn-del" onclick="pressNumpad('pvp-p1-ans', 'DEL')">⌫</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p1-ans', '0')">0</button>
+                        <button class="np-btn np-btn-del" onclick="pressNumpad('pvp-p1-ans', 'CLR')">C</button>
+                        <button class="np-btn np-btn-enter" onclick="checkPvpAnswer(1)">ส่งคำตอบ 🚀</button>
+                    </div>
+                </div>
+
+                <div class="pvp-card">
+                    <h3 id="pvp-card-p2-name" style="color:#ff0055;">ผู้เล่น 2 (ขวา)</h3>
+                    <div class="stars-box" id="pvp-p2-lives">⭐⭐⭐⭐</div>
+                    <div class="question" style="font-size:2rem;" id="pvp-p2-q">1+1</div>
+                    <input type="text" id="pvp-p2-ans" style="width:140px; font-size:1.8rem;" readonly>
+                    <br>
+                    <button class="btn controls-hint-btn" onclick="checkPvpAnswer(2)">ตอบ</button>
+                    <div class="controls-hint">
+                        ⌨️ <b>คีย์บอร์ดขวา:</b> เลข [Numpad 1-0]<br>
+                        [Numpad . / Del] ลบ | [Numpad Enter / Shiftขวา] ส่ง
+                    </div>
+
+                    <div class="touch-numpad p2-keypad">
+                        <button class="np-btn" onclick="pressNumpad('pvp-p2-ans', '1')">1</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p2-ans', '2')">2</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p2-ans', '3')">3</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p2-ans', '4')">4</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p2-ans', '5')">5</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p2-ans', '6')">6</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p2-ans', '7')">7</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p2-ans', '8')">8</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p2-ans', '9')">9</button>
+                        <button class="np-btn np-btn-del" onclick="pressNumpad('pvp-p2-ans', 'DEL')">⌫</button>
+                        <button class="np-btn" onclick="pressNumpad('pvp-p2-ans', '0')">0</button>
+                        <button class="np-btn np-btn-del" onclick="pressNumpad('pvp-p2-ans', 'CLR')">C</button>
+                        <button class="np-btn np-btn-enter" onclick="checkPvpAnswer(2)">ส่งคำตอบ 🚀</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-building-game" class="screen">
+            <div class="hud">
+                <div>⏱️ เวลา: <span id="building-timer" style="color:#00f3ff; font-family:'Orbitron';">90</span>s</div>
+                <div style="color:#ffe600;">เป้าหมาย: <span id="building-target-q">20</span> ข้อ</div>
+            </div>
+
+            <div class="building-arena">
+                <div class="building-column">
+                    <h3 style="color:#00f3ff; margin-bottom:5px;">🔵 <span id="bldg-card-t1-name">ทีม 1</span> (ตึกสูง: <span id="b1-height">0</span> ชั้น)</h3>
+                    <p style="font-size:0.9rem; color:#a0aec0; margin-bottom:6px;">ตอบแล้ว <span id="b1-count">0</span> ข้อ</p>
+                    <div class="building-visual-container" id="b1-visual"></div>
+                    <div class="question" style="font-size:1.8rem;" id="b1-q">1+1</div>
+                    <input type="text" id="b1-ans" style="width:140px; font-size:1.8rem;" readonly>
+                    <br>
+                    <button class="btn controls-hint-btn" onclick="checkBuildingAnswer(1)">สร้างตึก!</button>
+                    <div class="controls-hint">
+                        ⌨️ <b>ทีม 1:</b> ปุ่มเลขหลัก [1-0]<br>
+                        [Backspace] ลบ | [Enter] ส่ง
+                    </div>
+
+ <div class="touch-numpad p1-keypad">
+                        <button class="np-btn" onclick="pressNumpad('b1-ans', '1')">1</button>
+                        <button class="np-btn" onclick="pressNumpad('b1-ans', '2')">2</button>
+                        <button class="np-btn" onclick="pressNumpad('b1-ans', '3')">3</button>
+                        <button class="np-btn" onclick="pressNumpad('b1-ans', '4')">4</button>
+                        <button class="np-btn" onclick="pressNumpad('b1-ans', '5')">5</button>
+                        <button class="np-btn" onclick="pressNumpad('b1-ans', '6')">6</button>
+                        <button class="np-btn" onclick="pressNumpad('b1-ans', '7')">7</button>
+                        <button class="np-btn" onclick="pressNumpad('b1-ans', '8')">8</button>
+                        <button class="np-btn" onclick="pressNumpad('b1-ans', '9')">9</button>
+                        <button class="np-btn np-btn-del" onclick="pressNumpad('b1-ans', 'DEL')">⌫</button>
+                        <button class="np-btn" onclick="pressNumpad('b1-ans', '0')">0</button>
+                        <button class="np-btn np-btn-del" onclick="pressNumpad('b1-ans', 'CLR')">C</button>
+                        <button class="np-btn np-btn-enter" onclick="checkBuildingAnswer(1)">สร้างตึก! 🏢</button>
+                    </div>
+                </div>
+
+                <div class="building-column">
+                    <h3 style="color:#ff00f7; margin-bottom:5px;">🔴 <span id="bldg-card-t2-name">ทีม 2</span> (ตึกสูง: <span id="b2-height">0</span> ชั้น)</h3>
+                    <p style="font-size:0.9rem; color:#a0aec0; margin-bottom:6px;">ตอบแล้ว <span id="b2-count">0</span> ข้อ</p>
+                    <div class="building-visual-container" id="b2-visual"></div>
+                    <div class="question" style="font-size:1.8rem;" id="b2-q">1+1</div>
+                    <input type="text" id="b2-ans" style="width:140px; font-size:1.8rem;" readonly>
+                    <br>
+                    <button class="btn controls-hint-btn" onclick="checkBuildingAnswer(2)">สร้างตึก!</button>
+                    <div class="controls-hint">
+                        ⌨️ <b>ทีม 2:</b> ปุ่มเลข [Numpad 1-0]<br>
+                        [Numpad .] ลบ | [Numpad Enter / Shiftขวา] ส่ง
+                    </div>
+
+                    <div class="touch-numpad p2-keypad">
+                        <button class="np-btn" onclick="pressNumpad('b2-ans', '1')">1</button>
+                        <button class="np-btn" onclick="pressNumpad('b2-ans', '2')">2</button>
+                        <button class="np-btn" onclick="pressNumpad('b2-ans', '3')">3</button>
+                        <button class="np-btn" onclick="pressNumpad('b2-ans', '4')">4</button>
+                        <button class="np-btn" onclick="pressNumpad('b2-ans', '5')">5</button>
+                        <button class="np-btn" onclick="pressNumpad('b2-ans', '6')">6</button>
+                        <button class="np-btn" onclick="pressNumpad('b2-ans', '7')">7</button>
+                        <button class="np-btn" onclick="pressNumpad('b2-ans', '8')">8</button>
+                        <button class="np-btn" onclick="pressNumpad('b2-ans', '9')">9</button>
+                        <button class="np-btn np-btn-del" onclick="pressNumpad('b2-ans', 'DEL')">⌫</button>
+                        <button class="np-btn" onclick="pressNumpad('b2-ans', '0')">0</button>
+                        <button class="np-btn np-btn-del" onclick="pressNumpad('b2-ans', 'CLR')">C</button>
+                        <button class="np-btn np-btn-enter" onclick="checkBuildingAnswer(2)">สร้างตึก! 🏢</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-grid-game" class="screen">
+            <div class="hud">
+                <div>⏱️ เหลือเวลา: <span id="grid-timer" style="color:#00f3ff; font-family:'Orbitron';">60</span>s</div>
+                <div style="color:#ff0055; font-size:1.5rem;"><span id="grid-lives"></span></div>
+                <div style="color:#00ff88;">ค้นหาเลข: <span id="grid-target" style="font-size:2rem; font-family:'Orbitron';">1</span></div>
+            </div>
+
+            <div id="grid-board" class="grid-container"></div>
+        </div>
+
+        <div id="screen-result" class="screen">
+            <h1 id="result-title">🎯 สรุปผลการแข่งขัน</h1>
+            <div class="math-card" style="margin:20px 0;">
+                <p id="result-desc" style="font-size: 1.6rem; margin-bottom: 12px; color:#00f3ff;"></p>
+                <div id="result-detail"></div>
+            </div>
+            <button class="btn btn-success" onclick="soundEffect('click'); restartLastGame()">🔄 เล่นอีกครั้ง</button>
+            <button class="btn" onclick="soundEffect('click'); showScreen('screen-home')">🏠 กลับหน้าหลัก</button>
+        </div>
+
+    </div>
+<script>
+        /* ==================== WEB AUDIO SYNTHESIZER ==================== */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function soundEffect(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.08);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now); osc.stop(now + 0.08);
+            } else if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.1);
+                osc.frequency.setValueAtTime(783.99, now + 0.2);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now); osc.stop(now + 0.35);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(80, now + 0.25);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+                osc.start(now); osc.stop(now + 0.25);
+            } else if (type === 'laser') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(900, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.2);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+                osc.start(now); osc.stop(now + 0.2);
+            } else if (type === 'win') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.setValueAtTime(554.37, now + 0.15);
+                osc.frequency.setValueAtTime(659.25, now + 0.3);
+                osc.frequency.setValueAtTime(880, now + 0.45);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.7);
+                osc.start(now); osc.stop(now + 0.7);
+            }
+        }
+
+        /* ==================== COSMIC PARTICLE CANVAS ==================== */
+        const canvas = document.getElementById('space-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.color = ['#00f3ff', '#ff00f7', '#ffffff', '#00ff88'][Math.floor(Math.random() * 4)];
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+
+/* ==================== GLOBAL GAME STATE & DETAILED STATS ==================== */
+        const defaultStats = {
+            single: { games: 0, wins: 0, losses: 0, correct: 0, wrong: 0, totalScore: 0 },
+            pvp: { games: 0, p1Wins: 0, p2Wins: 0, draws: 0, correct: 0, wrong: 0 },
+            building: { games: 0, t1Wins: 0, t2Wins: 0, draws: 0, maxHeight: 0 },
+            grid: { games: 0, wins: 0, losses: 0, correct: 0, wrong: 0, bestTime: null },
+            globalCoins: 0
+        };
+
+        let gameState = {
+            coins: 0,
+            unlockedStages: [1],
+            stats: JSON.parse(JSON.stringify(defaultStats)),
+            timer: null,
+            timeLeft: 90,
+            lastPlayedMode: 'single',
+
+            single: { diff: 'easy', lives: 4, correct: 0, wrong: 0, currentQ: 0, maxQ: 20, ans: 0, isCustom: false },
+            pvp: { nameP1: "ผู้เล่น 1", nameP2: "ผู้เล่น 2", p1Lives: 4, p2Lives: 4, p1Correct: 0, p1Wrong: 0, p2Correct: 0, p2Wrong: 0, p1Ans: 0, p2Ans: 0, ropePos: 50, currentQCount: 0, maxQ: 30 },
+            building: { nameT1: "ทีม 1", nameT2: "ทีม 2", b1Height: 0, b2Height: 0, b1Ans: 0, b2Ans: 0, b1Count: 0, b2Count: 0, maxQ: 20 },
+            grid: { currentTarget: 1, maxTarget: 20, lives: 4, correct: 0, wrong: 0, startTime: 0 },
+            customQuestions: []
+        };
+
+        function loadStorage() {
+            const saved = localStorage.getItem('galaxy_math_detailed_v3');
+            if(saved) {
+                const data = JSON.parse(saved);
+                gameState.coins = data.coins || 0;
+                gameState.unlockedStages = data.unlockedStages || [1];
+                if(data.stats) {
+                    gameState.stats = { ...defaultStats, ...data.stats };
+                }
+            }
+            updateUI();
+        }
+
+        function saveStorage() {
+            localStorage.setItem('galaxy_math_detailed_v3', JSON.stringify({
+                coins: gameState.coins,
+                unlockedStages: gameState.unlockedStages,
+                stats: gameState.stats
+            }));
+            updateUI();
+        }
+
+        function resetStats() {
+            if(confirm('คุณแน่ใจหรือไม่ว่าต้องการล้างสถิติการเล่นทั้งหมด?')) {
+                gameState.stats = JSON.parse(JSON.stringify(defaultStats));
+                saveStorage();
+                soundEffect('laser');
+                alert('🧹 ล้างสถิติการเล่นทั้งหมดเรียบร้อยแล้ว!');
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('home-coins').innerText = gameState.coins;
+            document.getElementById('shop-coins').innerText = gameState.coins;
+
+            const st = gameState.stats;
+            document.getElementById('stat-single-games').innerText = st.single.games;
+            document.getElementById('stat-single-wins').innerText = st.single.wins;
+            document.getElementById('stat-single-losses').innerText = st.single.losses;
+            document.getElementById('stat-single-correct').innerText = st.single.correct;
+            document.getElementById('stat-single-wrong').innerText = st.single.wrong;
+            document.getElementById('stat-single-score').innerText = st.single.totalScore;
+
+            document.getElementById('stat-pvp-games').innerText = st.pvp.games;
+            document.getElementById('stat-pvp-p1wins').innerText = st.pvp.p1Wins;
+            document.getElementById('stat-pvp-p2wins').innerText = st.pvp.p2Wins;
+            document.getElementById('stat-pvp-draws').innerText = st.pvp.draws;
+            document.getElementById('stat-pvp-correct').innerText = st.pvp.correct;
+            document.getElementById('stat-pvp-wrong').innerText = st.pvp.wrong;
+
+            document.getElementById('stat-bldg-games').innerText = st.building.games;
+            document.getElementById('stat-bldg-t1wins').innerText = st.building.t1Wins;
+            document.getElementById('stat-bldg-t2wins').innerText = st.building.t2Wins;
+            document.getElementById('stat-bldg-draws').innerText = st.building.draws;
+            document.getElementById('stat-bldg-maxheight').innerText = st.building.maxHeight;
+
+            document.getElementById('stat-grid-games').innerText = st.grid.games;
+            document.getElementById('stat-grid-wins').innerText = st.grid.wins;
+            document.getElementById('stat-grid-losses').innerText = st.grid.losses;
+            document.getElementById('stat-grid-correct').innerText = st.grid.correct;
+            document.getElementById('stat-grid-wrong').innerText = st.grid.wrong;
+            document.getElementById('stat-grid-besttime').innerText = st.grid.bestTime ? `${st.grid.bestTime}s` : '--';
+
+            document.getElementById('stat-global-coins').innerText = st.globalCoins;
+
+            for(let i=2; i<=4; i++) {
+                if(gameState.unlockedStages.includes(i)) {
+                    const card = document.getElementById(`stage-${i}-card`);
+                    if(card) {
+                        card.classList.remove('locked');
+                        card.querySelector('p').innerText = "ปลดล็อกแล้ว 🔓";
+                        card.querySelector('p').style.color = "#00f3ff";
+                        const btn = document.getElementById(`btn-unlock-${i}`);
+                        if(btn) btn.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            clearInterval(gameState.timer);
+        }
+
+        function selectMode(mode) {
+            if(mode === 'single') showScreen('screen-single-setup');
+            else if(mode === 'pvp') showScreen('screen-pvp-setup');
+        }
+
+        function triggerFlash(color) {
+            const flash = document.getElementById('flash-overlay');
+            flash.style.background = color;
+            flash.style.opacity = '0.35';
+            setTimeout(() => { flash.style.opacity = '0'; }, 180);
+        }
+
+        function restartLastGame() {
+            if(gameState.lastPlayedMode === 'single') startSingleGame(gameState.single.isCustom);
+            else if(gameState.lastPlayedMode === 'pvp') startPvpGame();
+            else if(gameState.lastPlayedMode === 'building') startBuildingGame();
+            else if(gameState.lastPlayedMode === 'grid') startGridGame();
+            else showScreen('screen-home');
+        }
+
+/* ==================== ON-SCREEN NUMPAD HANDLER ==================== */
+        function pressNumpad(inputId, val) {
+            soundEffect('click');
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            if (val === 'DEL') {
+                input.value = input.value.slice(0, -1);
+            } else if (val === 'CLR') {
+                input.value = '';
+            } else {
+                if (input.value.length < 6) {
+                    input.value += val;
+                }
+            }
+        }
+
+        /* ==================== MATH GENERATOR ==================== */
+        function generateMath(diff) {
+            let num1, num2, op, ans;
+            const ops = ['+', '-'];
+            if(diff === 'medium') ops.push('*');
+            if(diff === 'hard' || diff === 'expert') ops.push('*', '/');
+
+            op = ops[Math.floor(Math.random() * ops.length)];
+
+            if(diff === 'easy') {
+                num1 = Math.floor(Math.random() * 10) + 1;
+                num2 = Math.floor(Math.random() * 10) + 1;
+            } else if(diff === 'medium') {
+                num1 = Math.floor(Math.random() * 20) + 1;
+                num2 = Math.floor(Math.random() * 15) + 1;
+            } else if(diff === 'hard') {
+                num1 = Math.floor(Math.random() * 50) + 1;
+                num2 = Math.floor(Math.random() * 20) + 1;
+            } else {
+                num1 = Math.floor(Math.random() * 100) + 10;
+                num2 = Math.floor(Math.random() * 30) + 2;
+            }
+
+            if(op === '/') {
+                ans = Math.floor(Math.random() * 10) + 1;
+                num1 = ans * num2;
+            } else if(op === '-') {
+                if(num1 < num2) [num1, num2] = [num2, num1];
+                ans = num1 - num2;
+            } else if(op === '+') {
+                ans = num1 + num2;
+            } else if(op === '*') {
+                ans = num1 * num2;
+            }
+
+            return { text: `${num1} ${op.replace('*','×').replace('/','÷')} ${num2}`, ans: ans };
+        }
+
+        /* ==================== SINGLE PLAYER MODE ==================== */
+        function startSingleGame(isCustom = false) {
+            gameState.lastPlayedMode = 'single';
+            gameState.single.isCustom = isCustom;
+            gameState.single.lives = 4;
+            gameState.single.correct = 0;
+            gameState.single.wrong = 0;
+            gameState.single.currentQ = 0;
+            
+            if(!isCustom) {
+                gameState.single.diff = document.getElementById('single-diff').value;
+                gameState.timeLeft = parseInt(document.getElementById('single-time').value);
+                gameState.single.maxQ = parseInt(document.getElementById('single-max-q').value);
+            } else {
+                gameState.timeLeft = 90;
+                gameState.single.maxQ = gameState.customQuestions.length;
+            }
+
+            document.getElementById('single-q-max').innerText = gameState.single.maxQ;
+            document.getElementById('single-coins').innerText = 0;
+            
+            showScreen('screen-single-game');
+            nextSingleQuestion();
+
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                document.getElementById('single-timer').innerText = gameState.timeLeft;
+                if(gameState.timeLeft <= 0) endGameSingle(false, '⏱️ หมดเวลาประลอง!');
+            }, 1000);
+        }
+
+        function nextSingleQuestion() {
+            if(gameState.single.currentQ >= gameState.single.maxQ) {
+                endGameSingle(true, '🏆 ยินดีด้วย! คุณพิชิตโจทย์ครบทั้งหมดแล้ว');
+                return;
+            }
+
+            gameState.single.currentQ++;
+            document.getElementById('single-q-count').innerText = gameState.single.currentQ;
+            document.getElementById('single-ans').value = '';
+            document.getElementById('single-ans').focus();
+
+            updateLivesDisplay('single-lives', gameState.single.lives);
+
+            if(gameState.single.isCustom) {
+                const q = gameState.customQuestions[gameState.single.currentQ - 1];
+                document.getElementById('single-q').innerText = q.text;
+                gameState.single.ans = q.ans;
+            } else {
+                const q = generateMath(gameState.single.diff);
+                document.getElementById('single-q').innerText = q.text;
+                gameState.single.ans = q.ans;
+            }
+        }
+
+        function checkSingleAnswer() {
+            const userAns = parseInt(document.getElementById('single-ans').value);
+            if(isNaN(userAns)) return;
+
+if(userAns === gameState.single.ans) {
+                soundEffect('correct');
+                triggerFlash('#00ff88');
+                gameState.single.correct++;
+                gameState.coins += 2;
+                gameState.stats.globalCoins += 2;
+                document.getElementById('single-coins').innerText = parseInt(document.getElementById('single-coins').innerText) + 2;
+                saveStorage();
+                nextSingleQuestion();
+            } else {
+                soundEffect('laser');
+                triggerFlash('#ff0055');
+                gameState.single.wrong++;
+                saveStorage();
+
+                shootBullet('single-turret', 'single-player-char', () => {
+                    soundEffect('wrong');
+                    gameState.single.lives--;
+                    const char = document.getElementById('single-player-char');
+                    char.classList.add('hit-shake');
+                    setTimeout(() => char.classList.remove('hit-shake'), 400);
+
+                    if(gameState.single.lives <= 0) {
+                        endGameSingle(false, '💥 ดาว/ชีวิตของคุณหมดลงแล้ว!');
+                    } else {
+                        nextSingleQuestion();
+                    }
+                });
+            }
+        }
+
+        function endGameSingle(isWin, reason) {
+            soundEffect(isWin ? 'win' : 'wrong');
+            
+            const st = gameState.stats.single;
+            st.games++;
+            if(isWin) st.wins++; else st.losses++;
+            st.correct += gameState.single.correct;
+            st.wrong += gameState.single.wrong;
+            st.totalScore += (gameState.single.correct * 10);
+            saveStorage();
+
+            const totalPlayed = gameState.single.correct + gameState.single.wrong;
+            const accuracy = totalPlayed > 0 ? ((gameState.single.correct / totalPlayed) * 100).toFixed(1) : 0;
+
+            document.getElementById('result-title').innerText = isWin ? '🏆 WINNER!' : '💥 GAME OVER';
+            document.getElementById('result-desc').innerText = reason;
+            document.getElementById('result-detail').innerHTML = `
+                <div class="stat-result-grid" style="grid-template-columns: 1fr;">
+                    <div class="stat-box">
+                        <p style="margin-bottom:6px;">✅ ตอบถูกทั้งหมด: <b style="color:#00ff88;">${gameState.single.correct}</b> ข้อ</p>
+                        <p style="margin-bottom:6px;">❌ ตอบผิดทั้งหมด: <b style="color:#ff0055;">${gameState.single.wrong}</b> ข้อ</p>
+                        <p style="margin-bottom:6px;">🎯 ความแม่นยำ: <b style="color:#00f3ff;">${accuracy}%</b></p>
+                        <p>🪙 เหรียญที่ได้รับ: <b style="color:#ffd700;">+${gameState.single.correct * 2}</b> 🪙</p>
+                    </div>
+                </div>
+            `;
+            showScreen('screen-result');
+        }
+/* ==================== PVP TUG OF WAR MODE ==================== */
+        function startPvpGame() {
+            gameState.lastPlayedMode = 'pvp';
+            gameState.pvp.nameP1 = document.getElementById('pvp-name-p1').value.trim() || "ผู้เล่น 1";
+            gameState.pvp.nameP2 = document.getElementById('pvp-name-p2').value.trim() || "ผู้เล่น 2";
+            gameState.pvp.p1Lives = 4;
+            gameState.pvp.p2Lives = 4;
+            gameState.pvp.p1Correct = 0;
+            gameState.pvp.p1Wrong = 0;
+            gameState.pvp.p2Correct = 0;
+            gameState.pvp.p2Wrong = 0;
+            gameState.pvp.ropePos = 50;
+            gameState.pvp.currentQCount = 0;
+            
+            gameState.timeLeft = parseInt(document.getElementById('pvp-time').value);
+            gameState.pvp.maxQ = parseInt(document.getElementById('pvp-max-q').value);
+
+            document.getElementById('pvp-p1-label').innerText = gameState.pvp.nameP1;
+            document.getElementById('pvp-p2-label').innerText = gameState.pvp.nameP2;
+            document.getElementById('pvp-card-p1-name').innerText = `${gameState.pvp.nameP1} (ซ้าย)`;
+            document.getElementById('pvp-card-p2-name').innerText = `${gameState.pvp.nameP2} (ขวา)`;
+
+            showScreen('screen-pvp-game');
+            updatePvpUI();
+            nextPvpQuestion(1);
+            nextPvpQuestion(2);
+
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                document.getElementById('pvp-timer').innerText = gameState.timeLeft;
+                if(gameState.timeLeft <= 0) evalPvpWinner('⏱️ หมดเวลาแข่งขัน!');
+            }, 1000);
+        }
+
+        function nextPvpQuestion(player) {
+            const q = generateMath('medium');
+            if(player === 1) {
+                document.getElementById('pvp-p1-q').innerText = q.text;
+                gameState.pvp.p1Ans = q.ans;
+                document.getElementById('pvp-p1-ans').value = '';
+            } else {
+                document.getElementById('pvp-p2-q').innerText = q.text;
+                gameState.pvp.p2Ans = q.ans;
+                document.getElementById('pvp-p2-ans').value = '';
+            }
+        }
+
+        function checkPvpAnswer(player) {
+            if(player === 1) {
+                const ans = parseInt(document.getElementById('pvp-p1-ans').value);
+                if(isNaN(ans)) return;
+                if(ans === gameState.pvp.p1Ans) {
+                    soundEffect('correct');
+                    gameState.pvp.p1Correct++;
+                    gameState.pvp.ropePos -= 8;
+                    nextPvpQuestion(1);
+                } else {
+                    soundEffect('wrong');
+                    gameState.pvp.p1Wrong++;
+                    gameState.pvp.p1Lives--;
+                    document.getElementById('pvp-p1-ans').value = '';
+                }
+            } else {
+                const ans = parseInt(document.getElementById('pvp-p2-ans').value);
+                if(isNaN(ans)) return;
+                if(ans === gameState.pvp.p2Ans) {
+                    soundEffect('correct');
+                    gameState.pvp.p2Correct++;
+                    gameState.pvp.ropePos += 8;
+                    nextPvpQuestion(2);
+                } else {
+                    soundEffect('wrong');
+                    gameState.pvp.p2Wrong++;
+                    gameState.pvp.p2Lives--;
+                    document.getElementById('pvp-p2-ans').value = '';
+                }
+            }
+
+            gameState.pvp.currentQCount++;
+            updatePvpUI();
+
+            if(gameState.pvp.p1Lives <= 0) evalPvpWinner(`${gameState.pvp.nameP1} ดาวหมดแล้ว!`);
+            else if(gameState.pvp.p2Lives <= 0) evalPvpWinner(`${gameState.pvp.nameP2} ดาวหมดแล้ว!`);
+            else if(gameState.pvp.ropePos <= 10) evalPvpWinner(`${gameState.pvp.nameP1} ชนะดึงเชือก!`);
+            else if(gameState.pvp.ropePos >= 90) evalPvpWinner(`${gameState.pvp.nameP2} ชนะดึงเชือก!`);
+            else if(gameState.pvp.currentQCount >= gameState.pvp.maxQ) evalPvpWinner('ตอบครบจำนวนข้อแล้ว!');
+        }
+
+        function updatePvpUI() {
+            document.getElementById('pvp-p1-score').innerText = gameState.pvp.p1Correct;
+            document.getElementById('pvp-p2-score').innerText = gameState.pvp.p2Correct;
+            updateLivesDisplay('pvp-p1-lives', gameState.pvp.p1Lives);
+            updateLivesDisplay('pvp-p2-lives', gameState.pvp.p2Lives);
+            document.getElementById('rope-knot').style.left = `${gameState.pvp.ropePos}%`;
+        }
+
+        function evalPvpWinner(reason) {
+            soundEffect('win');
+            let winner = "";
+            let p1Win = false, p2Win = false, isDraw = false;
+
+            if(gameState.pvp.p1Correct > gameState.pvp.p2Correct || gameState.pvp.p2Lives <= 0 || gameState.pvp.ropePos <= 10) {
+                winner = `👑 ${gameState.pvp.nameP1} (ฝั่งซ้าย) ชนะ!`;
+                p1Win = true;
+            } else if(gameState.pvp.p2Correct > gameState.pvp.p1Correct || gameState.pvp.p1Lives <= 0 || gameState.pvp.ropePos >= 90) {
+                winner = `👑 ${gameState.pvp.nameP2} (ฝั่งขวา) ชนะ!`;
+                p2Win = true;
+            } else {
+                winner = "🤝 เสมอกันอย่างสมศักดิ์ศรี!";
+                isDraw = true;
+            }
+
+const st = gameState.stats.pvp;
+            st.games++;
+            if(p1Win) st.p1Wins++;
+            else if(p2Win) st.p2Wins++;
+            else if(isDraw) st.draws++;
+
+            st.correct += (gameState.pvp.p1Correct + gameState.pvp.p2Correct);
+            st.wrong += (gameState.pvp.p1Wrong + gameState.pvp.p2Wrong);
+            saveStorage();
+
+            const p1Total = gameState.pvp.p1Correct + gameState.pvp.p1Wrong;
+            const p1Acc = p1Total > 0 ? ((gameState.pvp.p1Correct / p1Total) * 100).toFixed(1) : 0;
+
+            const p2Total = gameState.pvp.p2Correct + gameState.pvp.p2Wrong;
+            const p2Acc = p2Total > 0 ? ((gameState.pvp.p2Correct / p2Total) * 100).toFixed(1) : 0;
+
+            document.getElementById('result-title').innerText = winner;
+            document.getElementById('result-desc').innerText = reason;
+            document.getElementById('result-detail').innerHTML = `
+                <div class="stat-result-grid">
+                    <div class="stat-box" style="border-color:#00f3ff;">
+                        <h4 style="color:#00f3ff;">👨‍🚀 ${gameState.pvp.nameP1}</h4>
+                        <p>✅ ตอบถูก: <b style="color:#00ff88;">${gameState.pvp.p1Correct}</b> ข้อ</p>
+                        <p>❌ ตอบผิด: <b style="color:#ff0055;">${gameState.pvp.p1Wrong}</b> ข้อ</p>
+                        <p>🎯 แม่นยำ: <b>${p1Acc}%</b></p>
+                    </div>
+                    <div class="stat-box" style="border-color:#ff0055;">
+                        <h4 style="color:#ff0055;">👾 ${gameState.pvp.nameP2}</h4>
+                        <p>✅ ตอบถูก: <b style="color:#00ff88;">${gameState.pvp.p2Correct}</b> ข้อ</p>
+                        <p>❌ ตอบผิด: <b style="color:#ff0055;">${gameState.pvp.p2Wrong}</b> ข้อ</p>
+                        <p>🎯 แม่นยำ: <b>${p2Acc}%</b></p>
+                    </div>
+                </div>
+            `;
+            showScreen('screen-result');
+        }
+
+        /* ==================== BUILDING BATTLE MODE ==================== */
+        function startBuildingGame() {
+            gameState.lastPlayedMode = 'building';
+            gameState.building.nameT1 = document.getElementById('bldg-name-t1').value.trim() || "ทีม 1";
+            gameState.building.nameT2 = document.getElementById('bldg-name-t2').value.trim() || "ทีม 2";
+            gameState.building.b1Height = 0;
+            gameState.building.b2Height = 0;
+            gameState.building.b1Count = 0;
+            gameState.building.b2Count = 0;
+
+            gameState.timeLeft = parseInt(document.getElementById('building-time').value);
+            gameState.building.maxQ = parseInt(document.getElementById('building-max-q').value);
+
+            document.getElementById('bldg-card-t1-name').innerText = gameState.building.nameT1;
+            document.getElementById('bldg-card-t2-name').innerText = gameState.building.nameT2;
+
+            document.getElementById('building-target-q').innerText = gameState.building.maxQ;
+            document.getElementById('b1-visual').innerHTML = '';
+            document.getElementById('b2-visual').innerHTML = '';
+
+            showScreen('screen-building-game');
+            updateBuildingUI();
+            nextBuildingQuestion(1);
+            nextBuildingQuestion(2);
+
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                document.getElementById('building-timer').innerText = gameState.timeLeft;
+                if(gameState.timeLeft <= 0) evalBuildingWinner('⏱️ หมดเวลาการก่อสร้างตึก!');
+            }, 1000);
+        }
+
+        function nextBuildingQuestion(team) {
+            const q = generateMath('medium');
+            if(team === 1) {
+                document.getElementById('b1-q').innerText = q.text;
+                gameState.building.b1Ans = q.ans;
+                document.getElementById('b1-ans').value = '';
+            } else {
+                document.getElementById('b2-q').innerText = q.text;
+                gameState.building.b2Ans = q.ans;
+                document.getElementById('b2-ans').value = '';
+            }
+        }
+
+        function checkBuildingAnswer(team) {
+            if(team === 1) {
+                const ans = parseInt(document.getElementById('b1-ans').value);
+                if(isNaN(ans)) return;
+                gameState.building.b1Count++;
+
+                if(ans === gameState.building.b1Ans) {
+                    soundEffect('correct');
+                    gameState.building.b1Height++;
+                    addBuildingFloor(1);
+                    triggerFlash('#00ff88');
+                } else {
+                    soundEffect('wrong');
+                    if(gameState.building.b1Height > 0) gameState.building.b1Height--;
+                    removeBuildingFloor(1);
+                    triggerFlash('#ff0055');
+                }
+                nextBuildingQuestion(1);
+            } else {
+                const ans = parseInt(document.getElementById('b2-ans').value);
+                if(isNaN(ans)) return;
+                gameState.building.b2Count++;
+
+                if(ans === gameState.building.b2Ans) {
+                    soundEffect('correct');
+                    gameState.building.b2Height++;
+                    addBuildingFloor(2);
+                    triggerFlash('#00ff88');
+                } else {
+                    soundEffect('wrong');
+                    if(gameState.building.b2Height > 0) gameState.building.b2Height--;
+                    removeBuildingFloor(2);
+                    triggerFlash('#ff0055');
+                }
+                nextBuildingQuestion(2);
+            }
+
+            updateBuildingUI();
+
+            if(gameState.building.b1Count >= gameState.building.maxQ && gameState.building.b2Count >= gameState.building.maxQ) {
+                evalBuildingWinner('ทั้งสองทีมตอบโจทย์ครบตามจำนวนแล้ว!');
+            }
+        }
+
+        function addBuildingFloor(team) {
+            const visual = document.getElementById(team === 1 ? 'b1-visual' : 'b2-visual');
+            const floor = document.createElement('div');
+            floor.className = `building-floor ${team === 2 ? 'team2-floor' : ''}`;
+            visual.appendChild(floor);
+        }
+
+        function removeBuildingFloor(team) {
+            const visual = document.getElementById(team === 1 ? 'b1-visual' : 'b2-visual');
+            if(visual.lastChild) visual.removeChild(visual.lastChild);
+        }
+
+        function updateBuildingUI() {
+            document.getElementById('b1-height').innerText = gameState.building.b1Height;
+            document.getElementById('b2-height').innerText = gameState.building.b2Height;
+            document.getElementById('b1-count').innerText = gameState.building.b1Count;
+            document.getElementById('b2-count').innerText = gameState.building.b2Count;
+        }
+function evalBuildingWinner(reason) {
+            soundEffect('win');
+            let winner = "";
+            let t1Win = false, t2Win = false, isDraw = false;
+
+            if(gameState.building.b1Height > gameState.building.b2Height) {
+                winner = `👑 ${gameState.building.nameT1} ชนะศึกสร้างตึก!`;
+                t1Win = true;
+            } else if(gameState.building.b2Height > gameState.building.b1Height) {
+                winner = `👑 ${gameState.building.nameT2} ชนะศึกสร้างตึก!`;
+                t2Win = true;
+            } else {
+                winner = "🤝 เสมอกัน! ตึกสูงเท่ากันเป๊ะ";
+                isDraw = true;
+            }
+
+            const st = gameState.stats.building;
+            st.games++;
+            if(t1Win) st.t1Wins++;
+            else if(t2Win) st.t2Wins++;
+            else if(isDraw) st.draws++;
+
+            const currentMax = Math.max(gameState.building.b1Height, gameState.building.b2Height);
+            if(currentMax > st.maxHeight) st.maxHeight = currentMax;
+            saveStorage();
+
+            document.getElementById('result-title').innerText = winner;
+            document.getElementById('result-desc').innerText = reason;
+            document.getElementById('result-detail').innerHTML = `
+                <div class="stat-result-grid">
+                    <div class="stat-box" style="border-color:#00f3ff;">
+                        <h4 style="color:#00f3ff;">🔵 ${gameState.building.nameT1}</h4>
+                        <p>🏢 ความสูงตึก: <b style="color:#00f3ff;">${gameState.building.b1Height}</b> ชั้น</p>
+                        <p>📝 ตอบไปแล้ว: <b>${gameState.building.b1Count}</b> ข้อ</p>
+                    </div>
+                    <div class="stat-box" style="border-color:#ff00f7;">
+                        <h4 style="color:#ff00f7;">🔴 ${gameState.building.nameT2}</h4>
+                        <p>🏢 ความสูงตึก: <b style="color:#ff00f7;">${gameState.building.b2Height}</b> ชั้น</p>
+                        <p>📝 ตอบไปแล้ว: <b>${gameState.building.b2Count}</b> ข้อ</p>
+                    </div>
+                </div>
+            `;
+            showScreen('screen-result');
+        }
+
+        /* ==================== NUMBER FINDER GRID MODE ==================== */
+        function startGridGame() {
+            gameState.lastPlayedMode = 'grid';
+            gameState.grid.maxTarget = parseInt(document.getElementById('grid-range').value);
+            gameState.timeLeft = parseInt(document.getElementById('grid-time').value);
+            gameState.grid.currentTarget = 1;
+            gameState.grid.lives = 4;
+            gameState.grid.correct = 0;
+            gameState.grid.wrong = 0;
+            gameState.grid.startTime = Date.now();
+
+            document.getElementById('grid-target').innerText = gameState.grid.currentTarget;
+            updateHeartsDisplay();
+
+            let numbers = [];
+            for(let i=1; i<=gameState.grid.maxTarget; i++) numbers.push(i);
+            numbers.sort(() => Math.random() - 0.5);
+
+            const board = document.getElementById('grid-board');
+            board.innerHTML = '';
+            
+            let cols = 5;
+            if(gameState.grid.maxTarget >= 60) cols = 8;
+            if(gameState.grid.maxTarget >= 80) cols = 10;
+            board.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+            numbers.forEach(num => {
+                const btn = document.createElement('button');
+                btn.className = 'grid-btn';
+                btn.innerText = num;
+                btn.onclick = () => checkGridNumber(num, btn);
+                board.appendChild(btn);
+            });
+
+            showScreen('screen-grid-game');
+
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                const mins = Math.floor(gameState.timeLeft / 60);
+                const secs = gameState.timeLeft % 60;
+                document.getElementById('grid-timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
+                if(gameState.timeLeft <= 0) endGameGrid(false, '⏱️ หมดเวลาค้นหาตัวเลข!');
+            }, 1000);
+        }
+
+        function checkGridNumber(num, btnElement) {
+            if(btnElement.classList.contains('found')) return;
+
+            if(num === gameState.grid.currentTarget) {
+                soundEffect('correct');
+                triggerFlash('#00ff88');
+                btnElement.classList.add('found');
+                gameState.grid.correct++;
+                gameState.grid.currentTarget++;
+
+                if(gameState.grid.currentTarget > gameState.grid.maxTarget) {
+                    endGameGrid(true, '🎉 สุดยอดมาก! คุณค้นหาตัวเลขครบทั้งหมดแล้ว');
+                } else {
+                    document.getElementById('grid-target').innerText = gameState.grid.currentTarget;
+                }
+            } else {
+                soundEffect('wrong');
+                triggerFlash('#ff0055');
+                gameState.grid.wrong++;
+                
+                if(gameState.grid.lives > 0) {
+                    gameState.grid.lives--;
+                }
+                updateHeartsDisplay();
+
+                if(gameState.grid.lives <= 0) {
+                    endGameGrid(false, '💥 กดผิดครบ 4 ครั้ง! หัวใจหมดแล้ว เกมจบลงทันที');
+                }
+            }
+        }
+
+function updateHeartsDisplay() {
+            let hearts = '';
+            const currentLives = Math.max(0, Math.min(4, gameState.grid.lives));
+            for(let i = 0; i < 4; i++) {
+                hearts += (i < currentLives) ? '❤️' : '🖤';
+            }
+            document.getElementById('grid-lives').innerText = hearts;
+        }
+
+        function endGameGrid(isWin, reason) {
+            soundEffect(isWin ? 'win' : 'wrong');
+
+            const timeTaken = Math.floor((Date.now() - gameState.grid.startTime) / 1000);
+
+            const st = gameState.stats.grid;
+            st.games++;
+            if(isWin) {
+                st.wins++;
+                if(!st.bestTime || timeTaken < st.bestTime) {
+                    st.bestTime = timeTaken;
+                }
+            } else {
+                st.losses++;
+            }
+            st.correct += gameState.grid.correct;
+            st.wrong += gameState.grid.wrong;
+            saveStorage();
+
+            const totalAttempts = gameState.grid.correct + gameState.grid.wrong;
+            const accuracy = totalAttempts > 0 ? ((gameState.grid.correct / totalAttempts) * 100).toFixed(1) : 0;
+
+            document.getElementById('result-title').innerText = isWin ? '🏆 WINNER!' : '💥 GAME OVER';
+            document.getElementById('result-desc').innerText = reason;
+            document.getElementById('result-detail').innerHTML = `
+                <div class="stat-result-grid" style="grid-template-columns: 1fr;">
+                    <div class="stat-box">
+                        <p style="margin-bottom:6px;">🔢 ตัวเลขที่หาได้: <b style="color:#00ff88;">${gameState.grid.currentTarget - 1}</b> / ${gameState.grid.maxTarget}</p>
+                        <p style="margin-bottom:6px;">⏱️ เวลาที่ใช้: <b style="color:#00f3ff;">${timeTaken}</b> วินาที</p>
+                        <p style="margin-bottom:6px;">❌ กดผิดพลาด: <b style="color:#ff0055;">${gameState.grid.wrong}</b> ครั้ง</p>
+                        <p>🎯 ความแม่นยำในการกด: <b style="color:#00f3ff;">${accuracy}%</b></p>
+                    </div>
+                </div>
+            `;
+            showScreen('screen-result');
+        }
+
+        /* ==================== CUSTOM QUESTIONS ==================== */
+        function addCustomRow() {
+            const container = document.getElementById('custom-inputs');
+            const row = document.createElement('div');
+            row.style.margin = '8px 0';
+            row.innerHTML = `
+                <input type="text" placeholder="โจทย์ เช่น 15 + 25" class="custom-q" style="width:55%;">
+                <input type="number" placeholder="คำตอบ" class="custom-a" style="width:30%;">
+            `;
+            container.appendChild(row);
+        }
+
+        function startCustomGame() {
+            const qElements = document.querySelectorAll('.custom-q');
+            const aElements = document.querySelectorAll('.custom-a');
+            gameState.customQuestions = [];
+
+            for(let i=0; i<qElements.length; i++) {
+                if(qElements[i].value && aElements[i].value) {
+                    gameState.customQuestions.push({
+                        text: qElements[i].value,
+                        ans: parseInt(aElements[i].value)
+                    });
+                }
+            }
+
+            if(gameState.customQuestions.length === 0) {
+                alert('กรุณากรอกโจทย์อย่างน้อย 1 ข้อก่อนเริ่ม!');
+                return;
+            }
+
+            startSingleGame(true);
+        }
+
+        /* ==================== SHOP & UTILS ==================== */
+        function unlockStage(stageNum, cost) {
+            if(gameState.coins >= cost) {
+                gameState.coins -= cost;
+                gameState.unlockedStages.push(stageNum);
+                saveStorage();
+                alert(`🎉 ปลดล็อกด่านที่ ${stageNum} สำเร็จ!`);
+            } else {
+                alert('❌ เหรียญของคุณไม่พอสำหรับการปลดล็อก!');
+            }
+        }
+
+        function shootBullet(fromId, toId, onHit) {
+            const bullet = document.getElementById('single-bullet');
+            const fromElem = document.getElementById(fromId);
+            const toElem = document.getElementById(toId);
+
+            if(!bullet || !fromElem || !toElem) { onHit(); return; }
+
+            const fromRect = fromElem.getBoundingClientRect();
+            const toRect = toElem.getBoundingClientRect();
+
+            bullet.style.display = 'block';
+            bullet.style.left = `${fromRect.left + 20}px`;
+            bullet.style.top = `${fromRect.top + 20}px`;
+
+            let start = null;
+            function animate(timestamp) {
+                if (!start) start = timestamp;
+                let progress = (timestamp - start) / 180;
+
+                if (progress < 1) {
+                    let currentX = fromRect.left + (toRect.left - fromRect.left) * progress;
+                    let currentY = fromRect.top + (toRect.top - fromRect.top) * progress;
+                    bullet.style.left = `${currentX}px`;
+                    bullet.style.top = `${currentY}px`;
+                    requestAnimationFrame(animate);
+                } else {
+                    bullet.style.display = 'none';
+                    onHit();
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function updateLivesDisplay(elemId, count) {
+            let stars = '';
+            for(let i=0; i<4; i++) stars += i < count ? '⭐' : '💀';
+            document.getElementById(elemId).innerText = stars;
+        }
+/* ==================== DUAL-KEYBOARD EVENT LISTENER (INDEPENDENT INPUTS) ==================== */
+        window.addEventListener('keydown', function (e) {
+            const isPvpActive = document.getElementById('screen-pvp-game').classList.contains('active');
+            const isBldgActive = document.getElementById('screen-building-game').classList.contains('active');
+
+            if (isPvpActive || isBldgActive) {
+                const targetP1 = isPvpActive ? 'pvp-p1-ans' : 'b1-ans';
+                const targetP2 = isPvpActive ? 'pvp-p2-ans' : 'b2-ans';
+
+                // --- PLAYER 1 / TEAM 1 (LEFT SIDE - MAIN KEYBOARD) ---
+                if (e.code.startsWith('Digit')) {
+                    // ปุ่มตัวเลขหลักด้านบน 0-9
+                    const num = e.code.replace('Digit', '');
+                    pressNumpad(targetP1, num);
+                } else if (e.code === 'Backspace') {
+                    // Backspace ลบตัวเลขฝั่งซ้าย
+                    pressNumpad(targetP1, 'DEL');
+                } else if (e.code === 'Enter') {
+                    // Enter หลักส่งคำตอบฝั่งซ้าย
+                    e.preventDefault();
+                    if (isPvpActive) checkPvpAnswer(1);
+                    else checkBuildingAnswer(1);
+                }
+
+                // --- PLAYER 2 / TEAM 2 (RIGHT SIDE - NUMPAD) ---
+                if (e.code.startsWith('Numpad') && e.code.length === 7 && !isNaN(e.code.charAt(6))) {
+                    // ปุ่มตัวเลข Numpad 0-9
+                    const num = e.code.charAt(6);
+                    pressNumpad(targetP2, num);
+                } else if (e.code === 'NumpadDecimal' || e.code === 'Delete') {
+                    // Numpad . หรือ Delete ลบตัวเลขฝั่งขวา
+                    pressNumpad(targetP2, 'DEL');
+                } else if (e.code === 'NumpadEnter' || e.code === 'ShiftRight') {
+                    // Numpad Enter หรือ Shift ขวา ส่งคำตอบฝั่งขวา
+                    e.preventDefault();
+                    if (isPvpActive) checkPvpAnswer(2);
+                    else checkBuildingAnswer(2);
+                }
+            }
+        });
+
+        // Initialize Game
+        loadStorage();
+        addCustomRow();
+    </script>
+</body>
+</html>
